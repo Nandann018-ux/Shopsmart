@@ -1,163 +1,43 @@
-# FlashDrop – Limited-Time Flash Sale E-Commerce Platform
+# Project Idea: FlashDrop – Limited-Time Flash Sale E-Commerce Platform
 
-## 1. Project Overview
+## What we are going to build
+FlashDrop is a full-stack e-commerce platform specialized in **flash sales**: products are available only during a strict time window (saleStartTime to saleEndTime) and with limited stock. Once time expires or stock reaches zero, the product becomes unavailable for purchase — creating urgency and simulating real flash-sale events (like Amazon Lightning Deals or Flipkart Flash Sales).
 
-**FlashDrop** is a flash-sale-based e-commerce platform where products are available **only for a limited time window** and in **limited stock**.
+The project strongly emphasizes **backend logic**:
+- Time-based availability enforcement
+- Atomic stock deduction to prevent overselling (race conditions)
+- Transactional order placement
+- Automatic product expiry
 
-Once the sale time expires or stock runs out, the product becomes unavailable for purchase.
 
-The project focuses on implementing **real-world e-commerce business logic** such as time-based availability, stock consistency, and order validation.
+## Scope
+- User authentication & role-based access (Admin vs User)
+- Admin: CRUD for flash-sale products
+- User: Browse active flash products, place orders during active window
+- Backend validation: block orders if expired / out of stock
+- No payment gateway (simulate success), no cart (single-product orders for simplicity)
+- Background auto-expiry (can be simulated via API check or cron-like logic)
 
-This project is designed to demonstrate full-stack development skills with emphasis on backend logic and API design.
+## Key Features
+1. **User Roles & Auth**
+   - Register/Login (JWT)
+   - Admin creates/manages flash products
+   - Regular users browse & buy
 
----
+2. **Flash Sale Product Management**
+   - Fields: name, description, price, stock, saleStartTime, saleEndTime, isActive
+   - Products auto-invisible after end time or zero stock
 
-## 2. Problem Statement
+3. **Order Placement with Strong Backend Rules**
+   - Check: is product active? stock > quantity? current time in window?
+   - Deduct stock atomically (Prisma transaction)
+   - Prevent overselling in concurrent requests
 
-Traditional e-commerce platforms allow products to be available indefinitely, which reduces urgency and does not reflect real-world flash sale scenarios.
+4. **Active Product Listing**
+   - Only show currently active flash sales
+   - Frontend countdown timer per product
 
-Handling flash sales introduces challenges such as:
-- Time-based product visibility
-- Preventing purchases after sale expiry
-- Avoiding overselling during high demand
+5. **Order History**
+   - Users view their past orders
 
-FlashDrop solves these problems by enforcing strict **time-bound access** and **atomic stock handling** at the backend level.
-
----
-
-## 3. Key Features
-
-### 3.1 User Roles
-
-- **Admin**
-  - Creates and manages flash sale products
-- **User**
-  - Browses products
-  - Places orders during active sale windows
-
----
-
-### 3.2 Flash Sale Products
-
-Each product includes:
-- Name and description
-- Price
-- Limited stock
-- Sale start time
-- Sale end time
-- Active status
-
-**Business Rules**
-- Products are visible only during the sale window
-- Orders are blocked if:
-  - Sale has expired
-  - Stock is exhausted
-
----
-
-### 3.3 Order Management
-
-- Users can place orders only for active products
-- Stock is reduced inside a database transaction
-- Prevents race conditions and overselling
-
----
-
-### 3.4 Auto Expiry System
-
-- Background job automatically marks products inactive after sale end time
-- Ensures expired products cannot be purchased even if frontend fails
-
----
-
-## 4. Tech Stack
-
-### Backend
-- Node.js
-- Express.js
-- TypeScript
-- MongoDB
-- Prisma ORM
-- JWT Authentication
-- RESTful API architecture
-
-### Frontend
-- React
-- Countdown timer for flash sale products
-
-### Deployment
-- Backend: Render
-- Frontend: Vercel
-
----
-
-## 5. Database Design
-
-### User Model
-- id
-- email
-- password
-- role (ADMIN / USER)
-
-### Product Model
-- id
-- name
-- description
-- price
-- stock
-- saleStartTime
-- saleEndTime
-- isActive
-
-### Order Model
-- id
-- userId
-- productId
-- quantity
-- totalAmount
-- createdAt
-
----
-
-## 6. API Design
-
-### Product APIs
-| Method | Endpoint | Description |
-|------|---------|-------------|
-| POST | /api/products | Create flash sale product |
-| GET | /api/products | Get active products |
-| GET | /api/products/:id | Get product details |
-| PUT | /api/products/:id | Update product |
-| DELETE | /api/products/:id | Delete product |
-
-### Order APIs
-| Method | Endpoint | Description |
-|------|---------|-------------|
-| POST | /api/orders | Place an order |
-| GET | /api/orders | Get user orders |
-
----
-
-## 7. Learning Outcomes
-
-- Implemented time-based business logic at API level
-- Handled stock consistency using database transactions
-- Designed RESTful APIs with proper validation
-- Managed role-based access control
-- Deployed full-stack application to production
-
----
-
-## 8. Future Improvements
-
-- Payment gateway integration
-- Admin analytics dashboard
-- Product categories
-- Rate limiting for high traffic scenarios
-
----
-
-## 9. Conclusion
-
-FlashDrop is a practical full-stack project that simulates real-world flash sale e-commerce systems and demonstrates strong backend problem-solving skills suitable for full-stack developer interviews.
-
+This project demonstrates clean architecture, OOP principles (encapsulation in services, repository pattern), and proper error handling/validation — ideal for backend-focused evaluation.
