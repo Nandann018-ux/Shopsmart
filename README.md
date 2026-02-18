@@ -1,197 +1,70 @@
-# ⚡ FlashDrop – Limited-Time Flash Sale E-Commerce Platform
-
-## 📌 Project Overview
-
-**FlashDrop** is a flash-sale-based e-commerce platform where products are available only for a limited time window and in limited stock.
-
-Once the sale time expires or stock runs out, the product becomes unavailable for purchase.
-
-This project focuses on implementing real-world e-commerce business logic such as:
-
-* Time-based product availability
-* Stock consistency
-* Order validation
-
-It is designed to demonstrate full-stack development skills with a strong emphasis on backend logic and API design.
-
----
-
-## ❗ Problem Statement
-
-Traditional e-commerce platforms allow products to remain available indefinitely, reducing urgency and not reflecting real-world flash sale scenarios.
-
-Handling flash sales introduces challenges such as:
-
-* Time-based product visibility
-* Preventing purchases after sale expiry
-* Avoiding overselling during high demand
-
-**FlashDrop** solves these problems by enforcing strict time-bound access and atomic stock handling at the backend level.
-
----
-
-## 🚀 Key Features
-
-### 1️⃣ User Roles
-
-**Admin**
-
-* Creates and manages flash sale products
-
-**User**
-
-* Browses products
-* Places orders during active sale windows
-
----
-
-### 2️⃣ Flash Sale Products
-
-Each product includes:
-
-* Name & description
-* Price
-* Limited stock
-* Sale start time
-* Sale end time
-* Active status
-
-**Business Rules**
-
-* Products are visible only during the sale window
-* Orders are blocked if:
-
-  * Sale has expired
-  * Stock is exhausted
-
----
-
-### 3️⃣ Order Management
-
-* Users can place orders only for active products
-* Stock is reduced inside a database transaction
-* Prevents race conditions and overselling
-
----
-
-### 4️⃣ Auto Expiry System
-
-* Background job automatically marks products inactive after sale end time
-* Ensures expired products cannot be purchased even if the frontend fails
-
----
-
-## 🛠 Tech Stack
-
-### Backend
-
-* Node.js
-* Express.js
-* TypeScript
-* MongoDB
-* Prisma ORM
-* JWT Authentication
-* RESTful API Architecture
-
-### Frontend
-
-* React
-* Countdown timer for flash sale products
-
-### Deployment
-
-* Backend: Render
-* Frontend: Vercel
-
----
-
-## 🗄 Database Design
-
-### User Model
-
-```
-id
-email
-password
-role (ADMIN / USER)
-```
-
-### Product Model
-
-```
-id
-name
-description
-price
-stock
-saleStartTime
-saleEndTime
-isActive
-```
-
-### Order Model
-
-```
-id
-userId
-productId
-quantity
-totalAmount
-createdAt
-```
-
----
-
-## 🔌 API Design
-
-### Product APIs
-
-| Method | Endpoint          | Description               |
-| ------ | ----------------- | ------------------------- |
-| POST   | /api/products     | Create flash sale product |
-| GET    | /api/products     | Get active products       |
-| GET    | /api/products/:id | Get product details       |
-| PUT    | /api/products/:id | Update product            |
-| DELETE | /api/products/:id | Delete product            |
-
----
-
-### Order APIs
-
-| Method | Endpoint    | Description     |
-| ------ | ----------- | --------------- |
-| POST   | /api/orders | Place an order  |
-| GET    | /api/orders | Get user orders |
-
----
-
-## 🎯 Learning Outcomes
-
-* Implemented time-based business logic at API level
-* Handled stock consistency using database transactions
-* Designed RESTful APIs with proper validation
-* Managed role-based access control
-* Deployed full-stack application to production
-
----
-
-## 🔮 Future Improvements
-
-* Payment gateway integration
-* Admin analytics dashboard
-* Product categories
-* Rate limiting for high-traffic scenarios
-
----
-
-## 📚 Conclusion
-
-**FlashDrop** is a practical full-stack project that simulates real-world flash sale e-commerce systems and demonstrates strong backend problem-solving skills suitable for full-stack developer interviews.
-
----
-
-## 👨‍💻 Author
-
-**Nandan Acharya**
-
-If you like this project, feel free to ⭐ the repo and contribute!
+Project Title
+FlashDrop - Limited-Time Flash Sale E-Commerce Platform
+
+Description
+FlashDrop is a full-stack web application that implements a flash sale e-commerce system. Products are available for purchase only during specified time windows with limited stock quantities. The backend enforces strict business rules for availability, stock management, and order validation using database transactions to prevent overselling. This demonstrates software engineering practices including OOP principles, layered architecture, and design patterns.
+
+Features
+User authentication with role-based access control (admin and regular user roles).
+Admin functionality to create, update, and delete flash sale products with start/end times and stock limits.
+Product visibility restricted to active sales only (current time between saleStartTime and saleEndTime, stock greater than zero).
+Order placement with atomic stock deduction to handle concurrent requests.
+User order history viewing.
+Frontend countdown timers for active flash sales.
+Automatic product expiry logic through backend validation.
+
+Technology Stack
+Backend: Node.js with Express.js, TypeScript, Prisma ORM, MongoDB database, JWT for authentication.
+Frontend: React.js with Tailwind CSS or similar styling.
+Deployment: Backend on Render, Frontend on Vercel.
+Additional: RESTful API design, WebSocket support for real-time notifications if extended.
+
+Database Schema
+Users table: id (PK), email (unique), password (hashed), role (ADMIN or USER), createdAt.
+Products table: id (PK), name, description, price, stock (integer), saleStartTime (datetime), saleEndTime (datetime), isActive (boolean), createdAt.
+Orders table: id (PK), userId (FK to Users), productId (FK to Products), quantity (integer), totalAmount (decimal), status (enum: PENDING, COMPLETED), createdAt.
+
+API Endpoints
+GET /api/products - Retrieve list of currently active flash sale products.
+GET /api/products/:id - Get details of a specific product.
+POST /api/products - Create new flash sale product (admin only).
+PUT /api/products/:id - Update product details (admin only).
+DELETE /api/products/:id - Delete product (admin only).
+POST /api/orders - Place order for active product (validates stock and time window).
+GET /api/orders - Get user's order history.
+POST /api/auth/register - User registration.
+POST /api/auth/login - User login returning JWT.
+
+Architecture
+Controllers handle HTTP requests and orchestrate services.
+Services contain business logic (ProductService for availability checks, OrderService for transactions) following encapsulation and single responsibility.
+Repositories abstract database operations using Prisma.
+Strategy pattern used for product validation (time check, stock check).
+Observer pattern for potential notifications on expiry or stock changes.
+
+Setup Instructions
+Clone the repository.
+Backend: npm install, copy .env.example to .env and configure DATABASE_URL and JWT_SECRET, npm run prisma:generate, npm run prisma:dbpush, npm run dev.
+Frontend: npm install, npm run dev.
+Access backend at http://localhost:3001, frontend at http://localhost:3000.
+
+Business Logic Implementation
+Product availability determined by: Date.now() >= saleStartTime AND Date.now() <= saleEndTime AND stock > 0.
+Order creation wrapped in Prisma transaction: read current stock, validate, deduct stock, create order record atomically.
+Admin endpoints protected by role middleware checking JWT claims.
+
+Future Enhancements
+Integrate payment gateway like Stripe.
+Add product categories and search functionality.
+Implement admin analytics dashboard with sales metrics.
+Add WebSocket real-time stock updates and expiry notifications.
+Rate limiting for high-traffic protection.
+Email notifications for order confirmations.
+
+Learning Demonstrated
+OOP principles through service classes.
+Clean code structure with separation of concerns.
+Database transaction handling for consistency.
+RESTful API design with proper HTTP status codes and validation.
+Role-based authorization middleware.
+TypeScript for type safety across full stack.
