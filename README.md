@@ -1,111 +1,90 @@
-# ShopSmart: Limited-Time Flash Sale E-Commerce Platform
+# ShopSmart – Modern E-Commerce Platform
 
 ## Project Overview
-ShopSmart is a full-stack web application designed to handle high-urgency flash sale scenarios. Products are available for purchase only during specific time windows and with strictly limited stock quantities.
 
-The backend enforces robust business rules for availability, stock management, and order validation using database transactions to prevent overselling. This project demonstrates advanced software engineering practices, including Object-Oriented Programming (OOP) principles, layered architecture, and design patterns.
+ShopSmart is a full-stack e-commerce platform designed to deliver a seamless and scalable online shopping experience. It enables users to browse products, manage carts, and place orders, while providing administrators with tools to manage inventory and product listings.
 
-## Features
-- **Role-Based Access Control (RBAC)**: Secure authentication for Admin and User roles.
-- **Flash Sale Management**: Admin tools to create, update, and delete products with specific start and end times.
-- **Real-time Availability**: Product visibility is restricted to active sales only.
-- **Atomic Transactions**: Order placement with strict stock deduction to ensure data integrity.
-- **Dynamic Frontend**: Countdown timers for active sales and automatic product expiry.
-- **Order History**: Users can track their past purchases and order status.
+The system is built with a focus on clean architecture, scalability, and robust backend logic, ensuring reliable order processing and efficient data handling.
+
+## Core Features
+
+- **User Authentication & Authorization**
+  - Secure login and registration using JWT
+  - Role-based access control (Admin & User)
+- **Product Management**
+  - Admins can create, update, and delete products
+  - Dynamic product listings with real-time availability
+- **Shopping Cart System**
+  - Add, remove, and update product quantities
+  - Persistent cart handling
+- **Order Processing**
+  - Seamless checkout experience
+  - Atomic stock updates to prevent inconsistencies
+- **Order History**
+  - Users can view past orders and track status
 
 ## Technology Stack
 
 ### Backend
-- **Runtime**: Node.js & Express.js
-- **Language**: TypeScript (Full-stack type safety)
-- **ORM**: Prisma ORM
-- **Database**: MongoDB
-- **Auth**: JWT (JSON Web Tokens)
+- **Node.js & Express.js**
+- **TypeScript**
+- **Prisma ORM**
+- **MongoDB**
+- **JWT Authentication**
 
 ### Frontend
-- **Library**: React.js
-- **Styling**: Tailwind CSS
+- **React.js**
+- **Tailwind CSS**
+- **Framer Motion** (for animations & UI transitions)
 
-### Deployment
-- **Backend**: Render
-- **Frontend**: Vercel
+## Architecture
 
-## Architecture & Design Patterns
-ShopSmart follows a **Layered Architecture** to ensure separation of concerns:
-- **Controllers**: Handle HTTP requests and responses.
-- **Services**: House the core business logic.
-- **Repositories**: Abstract database operations via Prisma.
+The application follows a **Layered Architecture**:
+- **Controllers** → Handle API requests
+- **Services** → Business logic
+- **Repositories** → Database abstraction
 
-### Design Patterns Used
-- **Strategy Pattern**: Utilized for product validation logic, specifically for time-window and stock-level checks.
-- **Observer Pattern**: (Extensible) Used for triggering notifications regarding stock changes or product expiration.
-
-## Database Schema
-
-### Users
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| id | Primary Key | Unique user ID |
-| email | String | Unique user email |
-| password | String | Hashed/Encrypted password |
-| role | Enum | ADMIN or USER |
-
-### Products
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| id | Primary Key | Product ID |
-| name | String | Product Name |
-| stock | Integer | Available quantity |
-| saleStartTime | DateTime | Sale start window |
-| saleEndTime | DateTime | Sale end window |
-| isActive | Boolean | Manual toggle for status |
-
-## Business Logic: Order Transaction Flow
-To prevent overselling during high-traffic bursts, ShopSmart utilizes **Prisma Transactions**:
-1. Read current stock levels.
-2. Validate availability (Time check + Stock > 0).
-3. Deduct stock atomistically.
-4. Create the order record.
+### Order Flow (Transaction Safe)
+1. Validate product availability
+2. Check stock levels
+3. Deduct stock atomically
+4. Create order record
 
 > [!NOTE]
-> If any step in the flow fails, the entire transaction is rolled back to maintain database consistency.
+> If any step fails, the transaction is rolled back to maintain consistency.
 
 ## Setup Instructions
 
 ### 1. Clone Repository
 ```bash
-git clone <your-repository-url>
+git clone <your-repo-url>
 cd shopsmart
 ```
 
 ### 2. Backend Setup
 ```bash
-# Install dependencies
 npm install
-
-# Configure Environment
 cp .env.example .env
-# Add your DATABASE_URL and JWT_SECRET to .env
-
-# Initialize Prisma and Start
+# Edit .env with your DATABASE_URL and JWT_SECRET
 npm run prisma:generate
 npm run prisma:dbpush
 npm run dev
 ```
-Backend runs on: `http://localhost:3001`
+Backend: `http://localhost:3001`
 
 ### 3. Frontend Setup
 ```bash
 npm install
 npm run dev
 ```
-Frontend runs on: `http://localhost:3000`
+Frontend: `http://localhost:3000`
 
 ## Future Enhancements
-- **Payments**: Stripe gateway integration.
-- **Real-time**: WebSocket support for live stock updates.
-- **Analytics**: Admin dashboard for sales metrics and traffic trends.
-- **Security**: API Rate limiting to protect against bot-driven checkout attempts.
+- **Payment Integration** (Stripe)
+- **Recommendation System**
+- **Real-time Inventory Updates**
+- **Admin Analytics Dashboard**
 
 ## Conclusion
-ShopSmart serves as a high-performance portfolio piece showcasing how to manage concurrency and transaction safety in a modern e-commerce environment.
+
+ShopSmart demonstrates scalable backend architecture combined with a modern frontend experience, making it a strong portfolio project for full-stack development.
