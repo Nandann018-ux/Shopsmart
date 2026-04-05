@@ -4,40 +4,51 @@ import Container from './Container';
 import Card from './Card';
 import Button from './Button';
 import { ShoppingCart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const products = [
     {
         id: 1,
         name: 'Tech-Shell CoreV2',
-        price: '$289.00',
+        price: 289,
         category: 'Outerwear',
         image: 'https://images.unsplash.com/photo-1591047139829-d91aec16adcd?auto=format&fit=crop&q=80&w=600'
     },
     {
         id: 2,
         name: 'Neon Matrix Joggers',
-        price: '$149.00',
+        price: 149,
         category: 'Bottoms',
         image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=600'
     },
     {
         id: 3,
         name: 'Tactical Utility Chest',
-        price: '$89.00',
+        price: 89,
         category: 'Accessories',
         image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&q=80&w=600'
     },
     {
         id: 4,
         name: 'Stealth Knit Hoodie',
-        price: '$120.00',
+        price: 120,
         category: 'Tops',
         image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800'
     }
 ];
 
 const TrendingProducts = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
+
+    const handleQuickAdd = (e, product) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(product, 1);
+        navigate('/cart');
+    };
+
     return (
         <section className="py-32 bg-brand-black px-4">
             <Container>
@@ -63,9 +74,10 @@ const TrendingProducts = () => {
                                 className="bg-brand-gray-dark/50 group-hover/card:border-brand-neon/40 transition-all"
                             >
                                 <div className="flex justify-between items-center mt-6">
-                                    <span className="text-xl font-black text-brand-white">{product.price}</span>
+                                    <span className="text-xl font-black text-brand-white">${product.price}.00</span>
                                     <motion.button
                                         type="button"
+                                        onClick={(e) => handleQuickAdd(e, product)}
                                         whileHover={{ scale: 1.1, rotate: 5 }}
                                         whileTap={{ scale: 0.9 }}
                                         className="bg-brand-neon p-2.5 rounded-xl text-white shadow-[var(--shadow-neon)] hover:shadow-neon-strong transition-all"

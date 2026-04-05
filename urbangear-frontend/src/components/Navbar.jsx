@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { totalItems } = useCart();
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,8 +21,6 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Shop', path: '/shop' },
-        { name: 'Cart', path: '/shop' }, // Pointing to shop as placeholder
-        { name: 'Orders', path: '/shop' } // Pointing to shop as placeholder
     ];
 
     return (
@@ -49,10 +50,10 @@ const Navbar = () => {
                             <Link 
                                 key={link.name} 
                                 to={link.path} 
-                                className="hover:text-brand-neon transition-colors relative group"
+                                className={`hover:text-brand-neon transition-colors relative group ${location.pathname === link.path ? 'text-brand-neon' : ''}`}
                             >
                                 {link.name}
-                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-neon transition-all group-hover:w-full" />
+                                <span className={`absolute -bottom-1 left-0 h-0.5 bg-brand-neon transition-all group-hover:w-full ${location.pathname === link.path ? 'w-full' : 'w-0'}`} />
                             </Link>
                         ))}
                     </div>
@@ -62,9 +63,28 @@ const Navbar = () => {
                         <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
                             <Search size={20} className="group-hover:text-brand-neon transition-colors" />
                         </button>
+                        
+                        {/* Cart Action with Badge */}
+                        <Link to="/cart" className="relative p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
+                            <ShoppingBag size={20} className="group-hover:text-brand-neon transition-colors" />
+                            <AnimatePresence>
+                                {totalItems > 0 && (
+                                    <motion.span
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="absolute top-0 right-0 w-4 h-4 bg-brand-neon text-brand-black text-[10px] font-black flex items-center justify-center rounded-full shadow-neon"
+                                    >
+                                        {totalItems}
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </Link>
+
                         <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
                             <User size={20} className="group-hover:text-brand-neon transition-colors" />
                         </button>
+                        
                         <button 
                             type="button"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -85,7 +105,7 @@ const Navbar = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="md:hidden bg-brand-gray-dark border-b border-brand-gray-light overflow-hidden"
                     >
-                        <div className="px-4 pt-4 pb-8 space-y-4">
+                        <div className="px-4 pt-4 pb-8 space-y-4 text-center">
                             {navLinks.map((link) => (
                                 <Link 
                                     key={link.name} 
@@ -96,6 +116,13 @@ const Navbar = () => {
                                     {link.name}
                                 </Link>
                             ))}
+                            <Link 
+                                to="/cart" 
+                                onClick={() => setIsMenuOpen(false)}
+                                className="block py-3 text-lg font-bold text-brand-neon transition-colors tracking-widest uppercase"
+                            >
+                                Loadout ({totalItems})
+                            </Link>
                         </div>
                     </motion.div>
                 )}

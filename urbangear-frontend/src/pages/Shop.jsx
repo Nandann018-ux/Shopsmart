@@ -7,7 +7,8 @@ import Button from '../components/Button';
 import Skeleton from '../components/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, LayoutGrid, LayoutList } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const dummyProducts = [
     { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: 'https://images.unsplash.com/photo-1591047139829-d91aec16adcd?auto=format&fit=crop&q=80&w=600' },
@@ -21,13 +22,14 @@ const dummyProducts = [
 ];
 
 const Shop = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All Units');
     const [priceRange, setPriceRange] = useState(500);
     const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
 
     useEffect(() => {
-        // Simulate premium loading delay
         const timer = setTimeout(() => setLoading(false), 1200);
         return () => clearTimeout(timer);
     }, []);
@@ -40,6 +42,13 @@ const Shop = () => {
         result = result.filter(p => p.price <= priceRange);
         setFilteredProducts(result);
     }, [activeCategory, priceRange]);
+
+    const handleQuickAdd = (e, product) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(product, 1);
+        navigate('/cart');
+    };
 
     return (
         <Layout>
@@ -110,6 +119,7 @@ const Shop = () => {
                                                         <span className="text-xl font-black text-brand-white">${product.price}.00</span>
                                                         <motion.button
                                                             type="button"
+                                                            onClick={(e) => handleQuickAdd(e, product)}
                                                             whileHover={{ scale: 1.1, rotate: 5, backgroundColor: '#a855f7', color: '#fff' }}
                                                             whileTap={{ scale: 0.9 }}
                                                             className="p-3 rounded-2xl border border-brand-gray-light text-brand-white/60 transition-colors group/btn"

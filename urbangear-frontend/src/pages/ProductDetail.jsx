@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '../layouts/Layout';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import QuantitySelector from '../components/QuantitySelector';
+import { useCart } from '../context/CartContext';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ShieldCheck, Truck, RotateCcw, ChevronLeft, Star } from 'lucide-react';
 
@@ -16,14 +17,24 @@ const dummyProducts = [
 
 const ProductDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
         const found = dummyProducts.find(p => p.id === parseInt(id));
-        setProduct(found || dummyProducts[0]); // Fallback to first if not found
+        setProduct(found || dummyProducts[0]); 
         window.scrollTo(0, 0);
     }, [id]);
+
+    const handleAddToCart = () => {
+        if (product) {
+            addToCart(product, quantity);
+            // Optional: redirect to cart or show success toast
+            navigate('/cart');
+        }
+    };
 
     if (!product) return null;
 
@@ -110,7 +121,12 @@ const ProductDetail = () => {
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <Button variant="neon" size="lg" className="flex-1 uppercase tracking-[0.3em] font-black py-5 text-sm">
+                                <Button 
+                                    onClick={handleAddToCart}
+                                    variant="neon" 
+                                    size="lg" 
+                                    className="flex-1 uppercase tracking-[0.3em] font-black py-5 text-sm"
+                                >
                                     <ShoppingCart size={18} className="mr-3" />
                                     Add to Cart
                                 </Button>
