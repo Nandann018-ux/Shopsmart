@@ -35,19 +35,6 @@ const Navbar = () => {
                         </span>
                     </div>
 
-                    {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center space-x-10 text-xs font-bold uppercase tracking-widest text-brand-white/70">
-                        {['New Drops', 'Collection', 'Performance', 'About'].map((item) => (
-                            <a 
-                                key={item} 
-                                href="#" 
-                                className="hover:text-brand-neon transition-colors relative group"
-                            >
-                                {item}
-                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-neon transition-all group-hover:w-full" />
-                            </a>
-                        ))}
-                    </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
@@ -76,17 +63,6 @@ const Navbar = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="md:hidden bg-brand-gray-dark border-b border-brand-gray-light overflow-hidden"
                     >
-                        <div className="px-4 pt-4 pb-8 space-y-4">
-                            {['New Drops', 'Collection', 'Performance', 'About'].map((item) => (
-                                <a 
-                                    key={item} 
-                                    href="#" 
-                                    className="block py-3 text-lg font-bold text-brand-white hover:text-brand-neon transition-colors"
-                                >
-                                    {item}
-                                </a>
-                            ))}
-                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
