@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Skeleton from '../components/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, LayoutGrid, LayoutList } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const dummyProducts = [
     { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: 'https://images.unsplash.com/photo-1591047139829-d91aec16adcd?auto=format&fit=crop&q=80&w=600' },
@@ -65,10 +66,10 @@ const Shop = () => {
                                 </p>
                             </div>
                             <div className="flex items-center gap-4 bg-brand-gray-dark border border-brand-gray-light p-1.5 rounded-2xl">
-                                <button className="p-2.5 bg-brand-neon text-white rounded-xl shadow-[var(--shadow-neon)]">
+                                <button type="button" className="p-2.5 bg-brand-neon text-white rounded-xl shadow-[var(--shadow-neon)]">
                                     <LayoutGrid size={18} />
                                 </button>
-                                <button className="p-2.5 text-brand-white/40 hover:text-brand-white hover:bg-brand-gray-light rounded-xl transition-all">
+                                <button type="button" className="p-2.5 text-brand-white/40 hover:text-brand-white hover:bg-brand-gray-light rounded-xl transition-all">
                                     <LayoutList size={18} />
                                 </button>
                             </div>
@@ -108,6 +109,7 @@ const Shop = () => {
                                                     <div className="flex justify-between items-center mt-6">
                                                         <span className="text-xl font-black text-brand-white">${product.price}.00</span>
                                                         <motion.button
+                                                            type="button"
                                                             whileHover={{ scale: 1.1, rotate: 5, backgroundColor: '#a855f7', color: '#fff' }}
                                                             whileTap={{ scale: 0.9 }}
                                                             className="p-3 rounded-2xl border border-brand-gray-light text-brand-white/60 transition-colors group/btn"

@@ -4,6 +4,7 @@ import Container from './Container';
 import Card from './Card';
 import Button from './Button';
 import { ShoppingCart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const products = [
     {
@@ -32,13 +33,13 @@ const products = [
         name: 'Stealth Knit Hoodie',
         price: '$120.00',
         category: 'Tops',
-        image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600'
+        image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800'
     }
 ];
 
 const TrendingProducts = () => {
     return (
-        <section className="py-32 bg-brand-black">
+        <section className="py-32 bg-brand-black px-4">
             <Container>
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                     <div>
@@ -47,26 +48,27 @@ const TrendingProducts = () => {
                             Trending <span className="text-brand-neon">Deployments</span>
                         </h2>
                     </div>
-                    <Button variant="outline" className="uppercase tracking-[0.2em] text-[10px] font-black py-4 px-8">
+                    <Button to="/shop" variant="outline" className="uppercase tracking-[0.2em] text-[10px] font-black py-4 px-8">
                         View All Units
                     </Button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {products.map((product) => (
-                        <Link key={product.id} to={`/product/${product.id}`} className="block h-full">
+                        <Link key={product.id} to={`/product/${product.id}`} className="block h-full group/card transition-transform">
                             <Card
                                 title={product.name}
                                 subtitle={product.category}
                                 image={product.image}
-                                className="bg-brand-gray-dark/50 hover:border-brand-neon/50 transition-colors"
+                                className="bg-brand-gray-dark/50 group-hover/card:border-brand-neon/40 transition-all"
                             >
                                 <div className="flex justify-between items-center mt-6">
                                     <span className="text-xl font-black text-brand-white">{product.price}</span>
                                     <motion.button
+                                        type="button"
                                         whileHover={{ scale: 1.1, rotate: 5 }}
                                         whileTap={{ scale: 0.9 }}
-                                        className="bg-brand-neon p-2.5 rounded-xl text-white shadow-[var(--shadow-neon)]"
+                                        className="bg-brand-neon p-2.5 rounded-xl text-white shadow-[var(--shadow-neon)] hover:shadow-neon-strong transition-all"
                                     >
                                         <ShoppingCart size={18} />
                                     </motion.button>

@@ -18,8 +18,8 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Shop', path: '/shop' },
-        { name: 'Cart', path: '#' },
-        { name: 'Orders', path: '#' }
+        { name: 'Cart', path: '/shop' }, // Pointing to shop as placeholder
+        { name: 'Orders', path: '/shop' } // Pointing to shop as placeholder
     ];
 
     return (
@@ -31,7 +31,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-12">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-3 group cursor-pointer">
+                    <Link to="/" className="flex items-center gap-3 group">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             className="bg-brand-neon p-2 rounded-xl text-white shadow-[var(--shadow-neon)]"
@@ -59,13 +59,14 @@ const Navbar = () => {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
-                        <button className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
+                        <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
                             <Search size={20} className="group-hover:text-brand-neon transition-colors" />
                         </button>
-                        <button className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
+                        <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
                             <User size={20} className="group-hover:text-brand-neon transition-colors" />
                         </button>
                         <button 
+                            type="button"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="md:hidden p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all"
                         >
