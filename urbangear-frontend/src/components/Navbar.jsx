@@ -81,9 +81,10 @@ const Navbar = () => {
                             </AnimatePresence>
                         </Link>
 
-                        <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
+                        {/* Login/Profile Action */}
+                        <Link to="/login" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
                             <User size={20} className="group-hover:text-brand-neon transition-colors" />
-                        </button>
+                        </Link>
                         
                         <button 
                             type="button"
@@ -122,6 +123,13 @@ const Navbar = () => {
                                 className="block py-3 text-lg font-bold text-brand-neon transition-colors tracking-widest uppercase"
                             >
                                 Loadout ({totalItems})
+                            </Link>
+                            <Link 
+                                to="/login" 
+                                onClick={() => setIsMenuOpen(false)}
+                                className="block py-3 text-lg font-bold text-brand-white hover:text-brand-neon transition-colors tracking-widest uppercase"
+                            >
+                                Secure Access
                             </Link>
                         </div>
                     </motion.div>
