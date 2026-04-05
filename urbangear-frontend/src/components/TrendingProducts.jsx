@@ -54,24 +54,25 @@ const TrendingProducts = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {products.map((product) => (
-                        <Card
-                            key={product.id}
-                            title={product.name}
-                            subtitle={product.category}
-                            image={product.image}
-                            className="bg-brand-gray-dark/50"
-                        >
-                            <div className="flex justify-between items-center mt-6">
-                                <span className="text-xl font-black text-brand-white">{product.price}</span>
-                                <motion.button
-                                    whileHover={{ scale: 1.1, rotate: 5 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    className="bg-brand-neon p-2.5 rounded-xl text-white shadow-[var(--shadow-neon)]"
-                                >
-                                    <ShoppingCart size={18} />
-                                </motion.button>
-                            </div>
-                        </Card>
+                        <Link key={product.id} to={`/product/${product.id}`} className="block h-full">
+                            <Card
+                                title={product.name}
+                                subtitle={product.category}
+                                image={product.image}
+                                className="bg-brand-gray-dark/50 hover:border-brand-neon/50 transition-colors"
+                            >
+                                <div className="flex justify-between items-center mt-6">
+                                    <span className="text-xl font-black text-brand-white">{product.price}</span>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1, rotate: 5 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        className="bg-brand-neon p-2.5 rounded-xl text-white shadow-[var(--shadow-neon)]"
+                                    >
+                                        <ShoppingCart size={18} />
+                                    </motion.button>
+                                </div>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             </Container>
