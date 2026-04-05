@@ -5,7 +5,7 @@ import Container from '../components/Container';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { motion } from 'framer-motion';
-import { LogIn, Github, ArrowRight, ShieldCheck } from 'lucide-react';
+import { LogIn, Terminal, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -124,8 +124,8 @@ const Login = () => {
 
                         <div className="grid grid-cols-1 gap-4">
                             <button className="flex items-center justify-center gap-4 py-4 px-6 bg-brand-gray-dark border border-brand-gray-light rounded-2xl text-[10px] font-black uppercase tracking-widest text-brand-white/50 hover:text-brand-white hover:border-brand-white/20 transition-all group">
-                                <Github size={18} className="group-hover:text-brand-neon transition-colors" />
-                                Sync via GitHub
+                                <Terminal size={18} className="group-hover:text-brand-neon transition-colors" />
+                                Sync via Command
                             </button>
                         </div>
 
