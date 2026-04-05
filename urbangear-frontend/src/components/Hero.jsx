@@ -47,11 +47,11 @@ const Hero = () => {
                     transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     className="flex flex-col sm:flex-row gap-8 justify-center items-center"
                 >
-                    <Button variant="neon" size="lg" className="w-full sm:w-auto uppercase tracking-[0.2em] text-xs font-black py-5 px-14">
+                    <Button to="/shop" variant="neon" size="lg" className="w-full sm:w-auto uppercase tracking-[0.2em] text-xs font-black py-5 px-14">
                         Shop Now
                         <ArrowRight size={18} className="ml-3 group-hover:translate-x-2 transition-transform duration-300" />
                     </Button>
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto uppercase tracking-[0.2em] text-xs font-black py-5 px-14">
+                    <Button to="/shop" variant="outline" size="lg" className="w-full sm:w-auto uppercase tracking-[0.2em] text-xs font-black py-5 px-14">
                         Explore Collection
                     </Button>
                 </motion.div>

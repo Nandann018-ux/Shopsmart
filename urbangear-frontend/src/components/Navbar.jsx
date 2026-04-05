@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -14,6 +15,13 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const navLinks = [
+        { name: 'Home', path: '/' },
+        { name: 'Shop', path: '/shop' },
+        { name: 'Cart', path: '#' },
+        { name: 'Orders', path: '#' }
+    ];
+
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
             isScrolled 
@@ -23,7 +31,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-12">
                     {/* Logo */}
-                    <div className="flex items-center gap-3 group cursor-pointer">
+                    <Link to="/" className="flex items-center gap-3 group cursor-pointer">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             className="bg-brand-neon p-2 rounded-xl text-white shadow-[var(--shadow-neon)]"
@@ -33,8 +41,21 @@ const Navbar = () => {
                         <span className="text-xl font-black tracking-tighter text-brand-white uppercase">
                             Urban<span className="text-brand-neon">Gear</span>
                         </span>
-                    </div>
+                    </Link>
 
+                    {/* Desktop Nav */}
+                    <div className="hidden md:flex items-center space-x-12 text-xs font-black uppercase tracking-[0.3em] text-brand-white/70">
+                        {navLinks.map((link) => (
+                            <Link 
+                                key={link.name} 
+                                to={link.path} 
+                                className="hover:text-brand-neon transition-colors relative group"
+                            >
+                                {link.name}
+                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-neon transition-all group-hover:w-full" />
+                            </Link>
+                        ))}
+                    </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
@@ -63,6 +84,18 @@ const Navbar = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="md:hidden bg-brand-gray-dark border-b border-brand-gray-light overflow-hidden"
                     >
+                        <div className="px-4 pt-4 pb-8 space-y-4">
+                            {navLinks.map((link) => (
+                                <Link 
+                                    key={link.name} 
+                                    to={link.path} 
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="block py-3 text-lg font-bold text-brand-white hover:text-brand-neon transition-colors tracking-widest uppercase"
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

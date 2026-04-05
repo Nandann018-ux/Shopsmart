@@ -36,16 +36,20 @@ const Home = () => {
                         <p className="max-w-lg mx-auto text-brand-white/40 text-xs md:text-sm font-bold uppercase tracking-widest mb-12">
                             Join 50,000+ operatives receiving early access to restricted drops and exclusive tactical intel.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
+                        <form 
+                            onSubmit={(e) => e.preventDefault()}
+                            className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto"
+                        >
                             <input 
                                 type="email" 
                                 placeholder="ENTER OPERATIVE EMAIL" 
                                 className="flex-1 bg-brand-black/60 border border-brand-gray-light px-8 py-5 rounded-2xl text-brand-white focus:outline-none focus:border-brand-neon transition-all uppercase text-[10px] tracking-[0.3em] font-black placeholder:text-brand-white/10"
+                                required
                             />
-                            <Button variant="neon" size="lg" className="uppercase tracking-[0.3em] text-[10px] px-14 py-5 font-black">
+                            <Button type="submit" variant="neon" size="lg" className="uppercase tracking-[0.3em] text-[10px] px-14 py-5 font-black">
                                 Join Now
                             </Button>
-                        </div>
+                        </form>
                     </motion.div>
                 </Container>
             </section>
