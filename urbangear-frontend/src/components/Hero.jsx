@@ -1,22 +1,24 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Shield, Zap } from 'lucide-react';
+import Button from './Button';
+import Container from './Container';
 
 const Hero = () => {
     return (
-        <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden bg-white">
-            {/* Background elements */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-indigo-50/50 and to-transparent -z-10 rounded-full blur-3xl opacity-60" />
+        <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden bg-brand-black">
+            {/* Background dynamic blur effect */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-gradient-to-b from-brand-neon/10 to-transparent -z-10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
 
-            <div className="max-w-7xl mx-auto px-4 text-center">
+            <Container className="text-center relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100 shadow-sm mb-6 uppercase tracking-wider">
-                        <Star size={12} fill="currentColor" />
-                        <span>Winter Collection 2026</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gray-light/50 text-brand-neon text-[10px] font-black rounded-full border border-brand-gray-light shadow-[var(--shadow-neon)] mb-8 uppercase tracking-[0.2em]">
+                        <Zap size={12} fill="currentColor" />
+                        <span>Next Gen Tactical Gear</span>
                     </div>
                 </motion.div>
 
@@ -24,50 +26,68 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-8 leading-tight"
+                    className="text-6xl md:text-9xl font-black tracking-tighter text-brand-white mb-8 leading-[0.9] uppercase"
                 >
-                    Redefining <span className="text-indigo-600 italic">Urban</span> Fashion <br className="hidden md:block" /> For The Bold.
+                    Urban<span className="text-brand-neon italic">Gear</span> <br />
+                    <span className="text-outline text-transparent opacity-50">Evolution</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
-                    className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600 mb-10 leading-relaxed"
+                    className="max-w-xl mx-auto text-sm md:text-base text-brand-white/50 mb-12 leading-relaxed uppercase tracking-wider font-medium"
                 >
-                    Discover a curated selection of premium gear designed for performance and style. Elevate your everyday aesthetic with our legendary craftsmanship.
+                    Engineered for the asphalt jungle. Premium materials meets futuristic aesthetics in our latest streetwear drops.
                 </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                    className="flex flex-col sm:flex-row gap-6 justify-center items-center"
                 >
-                    <button className="px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 group">
-                        Shop Collection
-                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                    <button className="px-8 py-4 bg-white text-gray-900 font-bold border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all">
-                        View Lookbook
-                    </button>
+                    <Button variant="neon" size="lg" className="w-full sm:w-auto uppercase tracking-widest text-sm">
+                        Shop Drop 001
+                        <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto uppercase tracking-widest text-sm">
+                        Lookbook
+                    </Button>
                 </motion.div>
-            </div>
+                
+                {/* Features bar */}
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8, duration: 1 }}
+                    className="mt-20 flex flex-wrap justify-center gap-12 text-[10px] font-black uppercase tracking-[0.2em] text-brand-white/30"
+                >
+                    <div className="flex items-center gap-2 group hover:text-brand-neon transition-colors cursor-pointer">
+                        <Shield size={14} className="group-hover:scale-110 transition-transform" />
+                        <span>Durability Guaranteed</span>
+                    </div>
+                    <div className="flex items-center gap-2 group hover:text-brand-neon transition-colors cursor-pointer">
+                        <Star size={14} className="group-hover:scale-110 transition-transform" />
+                        <span>Limited Edition</span>
+                    </div>
+                </motion.div>
+            </Container>
 
-            {/* Decorative images/elements */}
+            {/* Futuristic Hero Image Showcase */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="mt-20 w-full max-w-5xl px-4 rounded-3xl overflow-hidden shadow-2xl relative border-8 border-gray-50"
+                transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+                className="mt-24 w-full max-w-6xl px-4 rounded-3xl overflow-hidden relative border border-brand-gray-light aspect-[21/9] shadow-[0_0_100px_rgba(168,85,247,0.1)] group"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1523381235312-3a1647fa9917?auto=format&fit=crop&q=80&w=2000"
-                    alt="Hero urban fashion showcase"
-                    className="w-full h-auto object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                    src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=2000"
+                    alt="Futuristic Urban Streetwear"
+                    className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2000ms] ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-            </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent pointer-events-none opacity-80" />
+            </motion.div>
         </section>
     );
 };
