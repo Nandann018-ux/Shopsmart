@@ -1,10 +1,10 @@
 import React from 'react';
 import Layout from '../layouts/Layout';
-import Hero from '../components/Hero';
-import Categories from '../components/Categories';
-import TrendingProducts from '../components/TrendingProducts';
-import Container from '../components/Container';
-import Button from '../components/Button';
+import Hero from '../components/home/Hero';
+import Categories from '../components/product/Categories';
+import TrendingProducts from '../components/product/TrendingProducts';
+import Container from '../components/ui/Container';
+import Button from '../components/ui/Button';
 import { motion } from 'framer-motion';
 
 const Home = () => {

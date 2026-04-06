@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../layouts/Layout';
-import Container from '../components/Container';
-import ShopSidebar from '../components/ShopSidebar';
-import Card from '../components/Card';
-import Button from '../components/Button';
-import Skeleton from '../components/Skeleton';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, LayoutGrid, LayoutList } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import Container from '../components/ui/Container';
+import ShopSidebar from '../components/product/ShopSidebar';
+import ProductGrid from '../components/product/ProductGrid';
+import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const dummyProducts = [
     { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: '/assets/tech-jacket.png' },
@@ -84,69 +81,12 @@ const Shop = () => {
                             </div>
                         </div>
 
-                        {/* Product Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <AnimatePresence mode="popLayout">
-                                {loading ? (
-                                    Array(6).fill(0).map((_, i) => (
-                                        <div key={`skel-${i}`} className="space-y-6">
-                                            <Skeleton className="h-72 w-full" />
-                                            <Skeleton className="h-6 w-3/4" />
-                                            <div className="flex justify-between items-center">
-                                                <Skeleton className="h-6 w-1/4" />
-                                                <Skeleton className="h-10 w-10" />
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    filteredProducts.map((product) => (
-                                        <motion.div
-                                            key={product.id}
-                                            layout
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.9 }}
-                                            transition={{ duration: 0.4, ease: "easeOut" }}
-                                        >
-                                            <Link to={`/product/${product.id}`} className="block h-full group/card">
-                                                <Card
-                                                    title={product.name}
-                                                    subtitle={product.category}
-                                                    image={product.image}
-                                                    className="bg-brand-gray-dark/50 group-hover/card:border-brand-neon/50 transition-colors cursor-pointer"
-                                                >
-                                                    <div className="flex justify-between items-center mt-6">
-                                                        <span className="text-xl font-black text-brand-white">${product.price}.00</span>
-                                                        <motion.button
-                                                            type="button"
-                                                            onClick={(e) => handleQuickAdd(e, product)}
-                                                            whileHover={{ scale: 1.1, rotate: 5, backgroundColor: '#a855f7', color: '#fff' }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            className="p-3 rounded-2xl border border-brand-gray-light text-brand-white/60 transition-colors group/btn"
-                                                        >
-                                                            <ShoppingCart size={20} className="group-hover/btn:scale-110 transition-transform" />
-                                                        </motion.button>
-                                                    </div>
-                                                </Card>
-                                            </Link>
-                                        </motion.div>
-                                    ))
-                                )}
-                            </AnimatePresence>
-                        </div>
-
-                        {!loading && filteredProducts.length === 0 && (
-                            <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="py-32 text-center border-2 border-dashed border-brand-gray-light rounded-[3rem]"
-                            >
-                                <span className="text-brand-neon text-4xl block mb-6 font-black tracking-tighter">0 UNITS FOUND</span>
-                                <p className="text-brand-white/40 uppercase text-xs font-bold tracking-widest">
-                                    No equipment matches your current tactical filters.
-                                </p>
-                            </motion.div>
-                        )}
+                        {/* Product Grid Component */}
+                        <ProductGrid 
+                          products={filteredProducts} 
+                          loading={loading} 
+                          onQuickAdd={handleQuickAdd} 
+                        />
                     </main>
                 </div>
             </Container>

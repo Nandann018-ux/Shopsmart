@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Layout from '../layouts/Layout';
-import Container from '../components/Container';
-import Button from '../components/Button';
-import QuantitySelector from '../components/QuantitySelector';
+import Container from '../components/ui/Container';
+import Button from '../components/ui/Button';
+import QuantitySelector from '../components/ui/QuantitySelector';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, ShoppingBag, ArrowRight, ShieldCheck, Truck, ChevronLeft } from 'lucide-react';
 

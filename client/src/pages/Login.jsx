@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../layouts/Layout';
-import Container from '../components/Container';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Container from '../components/ui/Container';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
 import { motion } from 'framer-motion';
 import { LogIn, Terminal, ArrowRight, ShieldCheck } from 'lucide-react';
 
