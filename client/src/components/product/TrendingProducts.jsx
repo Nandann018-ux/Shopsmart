@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Container from './Container';
-import Card from './Card';
-import Button from './Button';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
+import Button from '../ui/Button';
 import { ShoppingCart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 
 const products = [
     {
