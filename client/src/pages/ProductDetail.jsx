@@ -4,16 +4,10 @@ import Layout from '../layouts/Layout';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
 import QuantitySelector from '../components/ui/QuantitySelector';
+import productService from '../services/productService';
 import { useCart } from '../context/CartContext';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ShieldCheck, Truck, RotateCcw, ChevronLeft, Star } from 'lucide-react';
-
-const dummyProducts = [
-    { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: '/assets/tech-jacket.png', description: 'Engineered for the asphalt jungle. High-performance tactical shell with reinforced seam sealing and multi-point adjustment system.' },
-    { id: 2, name: 'Neon Matrix Joggers', price: 149, category: 'Bottoms', image: '/assets/neon-joggers.png', description: 'Cyber-inspired utility joggers featuring reactive neon hits and 6-pocket cargo configuration for maximum urban storage.' },
-    { id: 3, name: 'Tactical Utility Chest', price: 89, category: 'Accessories', image: '/assets/chest-bag.png', description: 'Modular chest rig designed for rapid deployment. Water-resistant ballistic nylon with integrated laser-cut MOLLE webbing.' },
-    { id: 4, name: 'Stealth Knit Hoodie', price: 120, category: 'Tops', image: '/assets/stealth-hoodie.png', description: 'Heavyweight loopback cotton construction. Minimalist oversized silhouette with covert storage pockets and reinforced elbows.' }
-];
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -21,11 +15,17 @@ const ProductDetail = () => {
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const found = dummyProducts.find(p => p.id === parseInt(id));
-        setProduct(found || dummyProducts[0]); 
-        window.scrollTo(0, 0);
+        const fetchProduct = async () => {
+            setLoading(true);
+            const data = await productService.getProductById(id);
+            setProduct(data);
+            setLoading(false);
+            window.scrollTo(0, 0);
+        };
+        fetchProduct();
     }, [id]);
 
     const handleAddToCart = () => {

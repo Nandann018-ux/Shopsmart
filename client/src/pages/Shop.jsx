@@ -3,20 +3,10 @@ import Layout from '../layouts/Layout';
 import Container from '../components/ui/Container';
 import ShopSidebar from '../components/product/ShopSidebar';
 import ProductGrid from '../components/product/ProductGrid';
+import productService from '../services/productService';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-
-const dummyProducts = [
-    { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: '/assets/tech-jacket.png' },
-    { id: 2, name: 'Neon Matrix Joggers', price: 149, category: 'Bottoms', image: '/assets/neon-joggers.png' },
-    { id: 3, name: 'Tactical Utility Chest', price: 89, category: 'Accessories', image: '/assets/chest-bag.png' },
-    { id: 4, name: 'Stealth Knit Hoodie', price: 120, category: 'Tops', image: '/assets/stealth-hoodie.png' },
-    { id: 5, name: 'Thermal Base Layer', price: 65, category: 'Tops', image: '/assets/thermal-base.png' },
-    { id: 6, name: 'Grid-Lock Sneakers', price: 195, category: 'Accessories', image: '/assets/cargo-pants.png' }, // Using cargo pants as a temporary high-quality asset
-    { id: 7, name: 'Urban Cargo V3', price: 160, category: 'Bottoms', image: '/assets/cargo-pants.png' },
-    { id: 8, name: 'Elite Tactical Vest', price: 210, category: 'Outerwear', image: '/assets/tactical-vest.png' }
-];
 
 const Shop = () => {
     const navigate = useNavigate();
@@ -24,15 +14,21 @@ const Shop = () => {
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All Units');
     const [priceRange, setPriceRange] = useState(500);
-    const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
+    const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 1200);
-        return () => clearTimeout(timer);
+        const fetchProducts = async () => {
+            setLoading(true);
+            const data = await productService.getAllProducts();
+            setProducts(data);
+            setLoading(false);
+        };
+        fetchProducts();
     }, []);
 
     useEffect(() => {
-        let result = dummyProducts;
+        let result = products;
         if (activeCategory !== 'All Units') {
             result = result.filter(p => p.category === activeCategory);
         }
