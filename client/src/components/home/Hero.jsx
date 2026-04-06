@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Zap, Shield, Star } from 'lucide-react';
-import Button from './Button';
-import Container from './Container';
+import Button from '../ui/Button';
+import Container from '../ui/Container';
 
 const Hero = () => {
     return (
