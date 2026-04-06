@@ -8,8 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve Static Frontend Assets
-// In production, the client/dist folder is served directly by the server
 const clientDistPath = path.join(__dirname, '../../client/dist');
 app.use(express.static(clientDistPath));
 
@@ -22,8 +20,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// SPA Catch-all Route
-// Redirect all non-API requests to the frontend's index.html
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(clientDistPath, 'index.html'));

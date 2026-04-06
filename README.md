@@ -1,90 +1,57 @@
-# ShopSmart – Modern E-Commerce Platform
+# ShopSmart – Modern Full-Stack E-Commerce Platform
 
-## Project Overview
+ShopSmart is a high-performance, full-stack e-commerce solution built with a focus on **scalability**, **clean architecture**, and **production-ready deployment**. It features a reactive React frontend and a robust TypeScript/Node.js backend, unified under a single-stage build system.
 
-ShopSmart is a full-stack e-commerce platform designed to deliver a seamless and scalable online shopping experience. It enables users to browse products, manage carts, and place orders, while providing administrators with tools to manage inventory and product listings.
+##  Presentation Highlights (Viva)
 
-The system is built with a focus on clean architecture, scalability, and robust backend logic, ensuring reliable order processing and efficient data handling.
+- **Unified Build Pipeline**: A custom-engineered shell automation that synchronizes frontend assets with backend static serving.
+- **Multi-Stage Docker Architecture**: Optimized production images using Docker multi-stage builds to separate build-time dependencies from the final lean runtime.
+- **Full-Stack Static Serving**: The backend is configured to serve the entire SPA autonomously, eliminating the need for complex proxy configurations in production.
+- **CI/CD Integration**: Fully automated GitHub Actions pipeline for global build verification and recursive testing.
 
-## Core Features
+##  Quick Start (Demonstration Mode)
 
-- **User Authentication & Authorization**
-  - Secure login and registration using JWT
-  - Role-based access control (Admin & User)
-- **Product Management**
-  - Admins can create, update, and delete products
-  - Dynamic product listings with real-time availability
-- **Shopping Cart System**
-  - Add, remove, and update product quantities
-  - Persistent cart handling
-- **Order Processing**
-  - Seamless checkout experience
-  - Atomic stock updates to prevent inconsistencies
-- **Order History**
-  - Users can view past orders and track status
-
-## Technology Stack
-
-### Backend
-- **Node.js & Express.js**
-- **TypeScript**
-- **Prisma ORM**
-- **MongoDB**
-- **JWT Authentication**
-
-### Frontend
-- **React.js**
-- **Tailwind CSS**
-- **Framer Motion** (for animations & UI transitions)
-
-## Architecture
-
-The application follows a **Layered Architecture**:
-- **Controllers** → Handle API requests
-- **Services** → Business logic
-- **Repositories** → Database abstraction
-
-### Order Flow (Transaction Safe)
-1. Validate product availability
-2. Check stock levels
-3. Deduct stock atomically
-4. Create order record
-
-> [!NOTE]
-> If any step fails, the transaction is rolled back to maintain consistency.
-
-## Setup Instructions
-
-### 1. Clone Repository
+### 1. Simple Build & Run
+The fastest way to demonstrate the project:
 ```bash
-git clone <your-repo-url>
-cd shopsmart
+chmod +x ./build.sh
+./build.sh
+node server/dist/index.js
+```
+The application will be live at: `http://localhost:5000`
+
+### 2. Docker Deployment
+For a professional, containerized demonstration:
+```bash
+docker-compose up --build
 ```
 
-### 2. Backend Setup
-```bash
-npm install
-cp .env.example .env
-# Edit .env with your DATABASE_URL and JWT_SECRET
-npm run prisma:generate
-npm run prisma:dbpush
-npm run dev
+## Architecture Overview
+
+### Backend (Node.js & TypeScript)
+- **Framework**: Express.js
+- **ORM**: Prisma with MongoDB
+- **Security**: JWT-based Authentication & BCrypt Hashing
+- **Architecture**: Layered (Controllers → Services → Repository)
+
+### Frontend (React & Vite)
+- **Styling**: Tailwind CSS 
+- **Animations**: Framer Motion (Premium HUD aesthetic)
+- **State Management**: React Context (Cart & Auth)
+
+## Project Structure
+
+```text
+├── client/          # Vite + React Frontend
+├── server/          # TypeScript + Express Backend
+├── build.sh         # Unified automation script
+├── Dockerfile       # Multi-stage production build
+└── docker-compose.yml
 ```
-Backend: `http://localhost:3001`
 
-### 3. Frontend Setup
-```bash
-npm install
-npm run dev
-```
-Frontend: `http://localhost:3000`
+## CI/CD Status
+The project includes a GitHub Actions workflow that executes a full project rebuild and sanity check on every commit to ensure 100% stability.
 
-## Future Enhancements
-- **Payment Integration** (Stripe)
-- **Recommendation System**
-- **Real-time Inventory Updates**
-- **Admin Analytics Dashboard**
+---
 
-## Conclusion
-
-ShopSmart demonstrates scalable backend architecture combined with a modern frontend experience, making it a strong portfolio project for full-stack development.
+**ShopSmart** was developed to showcase modern web engineering practices, combining a tactile user experience with a scalable, professional-grade backend.

@@ -12,13 +12,11 @@ const Home = () => {
         <Layout>
             <Hero />
             
-            {/* Featured Categories (New Section) */}
             <Categories />
 
-            {/* Trending Products (New Section) */}
             <TrendingProducts />
 
-            {/* Newsletter Section with Neon Glow (Existing) */}
+
             <section className="py-40 bg-brand-black border-t border-brand-gray-light overflow-hidden relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-72 bg-brand-neon/5 blur-[140px] rounded-full pointer-events-none" />
                 <Container className="relative">
