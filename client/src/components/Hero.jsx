@@ -86,7 +86,7 @@ const Hero = () => {
                 className="absolute inset-0 pointer-events-none -z-20 overflow-hidden"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=2000"
+                    src="/assets/hero-bg.png"
                     alt="Street Background"
                     className="w-full h-full object-cover grayscale brightness-50"
                 />

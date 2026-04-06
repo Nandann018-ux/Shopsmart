@@ -1,0 +1,28 @@
+name: Ci Pipeline
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm i
+        working-directory: server
+      - run: npm test
+        working-directory: server
+      - name: Rollback
+        if: failure()
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git revert --no-edit HEAD
+          git commit --amend -m "Revert: Automatic rollback due to CI failure [skip ci]"
+          git push

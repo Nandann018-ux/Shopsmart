@@ -25,7 +25,7 @@ const categories = [
     {
         id: 4,
         name: 'Jackets',
-        image: 'https://images.unsplash.com/photo-1591047139829-d91aec16adcd?auto=format&fit=crop&q=80&w=800',
+        image: '/assets/tech-jacket.png',
         gridClass: 'md:col-span-2 h-[300px]'
     }
 ];

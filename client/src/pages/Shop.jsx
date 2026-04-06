@@ -11,14 +11,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const dummyProducts = [
-    { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: 'https://images.unsplash.com/photo-1591047139829-d91aec16adcd?auto=format&fit=crop&q=80&w=600' },
-    { id: 2, name: 'Neon Matrix Joggers', price: 149, category: 'Bottoms', image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=600' },
-    { id: 3, name: 'Tactical Utility Chest', price: 89, category: 'Accessories', image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&q=80&w=600' },
-    { id: 4, name: 'Stealth Knit Hoodie', price: 120, category: 'Tops', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600' },
-    { id: 5, name: 'Thermal Base Layer', price: 65, category: 'Tops', image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=600' },
-    { id: 6, name: 'Grid-Lock Sneakers', price: 195, category: 'Accessories', image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=600' },
-    { id: 7, name: 'Urban Cargo V3', price: 160, category: 'Bottoms', image: 'https://images.unsplash.com/photo-1624371414361-e6e8ea01c1e6?auto=format&fit=crop&q=80&w=600' },
-    { id: 8, name: 'Elite Tactical Vest', price: 210, category: 'Outerwear', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600' }
+    { id: 1, name: 'Tech-Shell CoreV2', price: 289, category: 'Outerwear', image: '/assets/tech-jacket.png' },
+    { id: 2, name: 'Neon Matrix Joggers', price: 149, category: 'Bottoms', image: '/assets/neon-joggers.png' },
+    { id: 3, name: 'Tactical Utility Chest', price: 89, category: 'Accessories', image: '/assets/chest-bag.png' },
+    { id: 4, name: 'Stealth Knit Hoodie', price: 120, category: 'Tops', image: '/assets/stealth-hoodie.png' },
+    { id: 5, name: 'Thermal Base Layer', price: 65, category: 'Tops', image: '/assets/thermal-base.png' },
+    { id: 6, name: 'Grid-Lock Sneakers', price: 195, category: 'Accessories', image: '/assets/cargo-pants.png' }, // Using cargo pants as a temporary high-quality asset
+    { id: 7, name: 'Urban Cargo V3', price: 160, category: 'Bottoms', image: '/assets/cargo-pants.png' },
+    { id: 8, name: 'Elite Tactical Vest', price: 210, category: 'Outerwear', image: '/assets/tactical-vest.png' }
 ];
 
 const Shop = () => {
