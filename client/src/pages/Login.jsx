@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import authService from '../services/authService';
 import { motion } from 'framer-motion';
 import { LogIn, Terminal, ArrowRight, ShieldCheck } from 'lucide-react';
 
@@ -13,12 +14,12 @@ const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrors({});
 
-        // Mock Validation
+        // Basic Front-end Validation
         const newErrors = {};
         if (!formData.email) newErrors.email = 'Operative ID Required';
         if (!formData.password) newErrors.password = 'Security Key Missing';
@@ -29,11 +30,18 @@ const Login = () => {
             return;
         }
 
-        // Simulate Neural Processing
-        setTimeout(() => {
-            setLoading(false);
+        try {
+            // Attempt Neural Processing via authService
+            await authService.login(formData);
             navigate('/');
-        }, 1500);
+        } catch (error) {
+            console.error('Authentication failure:', error);
+            setErrors({ 
+                form: error.response?.data?.message || 'Access Denied: Invalid Credentials or API Offline' 
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

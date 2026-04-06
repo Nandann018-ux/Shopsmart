@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import authService from '../services/authService';
 import { motion } from 'framer-motion';
 import { UserPlus, ArrowRight, ShieldCheck, Mail, Lock, User } from 'lucide-react';
 
@@ -13,12 +14,12 @@ const Signup = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
     const [errors, setErrors] = useState({});
 
-    const handleSignup = (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrors({});
 
-        // Mock Validation
+        // Basic Front-end Validation
         const newErrors = {};
         if (!formData.name) newErrors.name = 'Full Operative Name Required';
         if (!formData.email) newErrors.email = 'Valid Email ID Required';
@@ -31,11 +32,17 @@ const Signup = () => {
             return;
         }
 
-        // Simulate Neural Database Sync
-        setTimeout(() => {
-            setLoading(false);
+        try {
+            await authService.register(formData);
             navigate('/login');
-        }, 1500);
+        } catch (error) {
+            console.error('Registration failure:', error);
+            setErrors({ 
+                form: error.response?.data?.message || 'Access Denied: Registration Protocol Failed' 
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
