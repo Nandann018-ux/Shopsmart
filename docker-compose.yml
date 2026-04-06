@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  shopsmart:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shopsmart-prod:latest
+    container_name: shopsmart-viva-demo
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
