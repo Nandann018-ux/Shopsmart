@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-12">
         <div className="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
           <Link to="/" className="text-2xl font-black tracking-tighter hover:text-brand-neon transition-colors font-brand uppercase">
-            URBAN<span className="text-brand-neon italic">GEAR</span>
+            SHOP<span className="text-brand-neon italic">SMART</span>
           </Link>
           <p className="text-brand-white/50 text-xs max-w-xs uppercase tracking-widest font-bold">
             Quality streetwear and tactical essentials for the modern city explorer.
@@ -36,7 +36,7 @@ const Footer = () => {
       </div>
       
       <div className="max-w-7xl mx-auto px-4 mt-20 pt-8 border-t border-brand-gray-light flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] text-brand-white/20 font-black uppercase tracking-widest text-center">
-        <p>© 2026 UrbanGear Studio. All Rights Reserved.</p>
+        <p>© 2026 ShopSmart Studio. All Rights Reserved.</p>
         <div className="flex gap-6">
           <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Instagram</a>
           <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Twitter</a>

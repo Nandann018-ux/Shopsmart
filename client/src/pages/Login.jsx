@@ -76,7 +76,7 @@ const Login = () => {
                         <Input
                             label="Operative Email"
                             type="email"
-                            placeholder="OPERATIVE@URBANGEAR.HQ"
+                            placeholder="OPERATIVE@SHOPSMART.HQ"
                             value={formData.email}
                             onChange={(e) => setFormData({...formData, email: e.target.value})}
                             error={errors.email}

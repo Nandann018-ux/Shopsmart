@@ -18,7 +18,7 @@ const Hero = () => {
                 >
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gray-light/50 text-brand-neon text-[10px] font-black rounded-full border border-brand-gray-light shadow-[var(--shadow-neon)] mb-10 uppercase tracking-[0.3em]">
                         <Zap size={12} fill="currentColor" />
-                        <span>UrbanGear Drop 001 / NOW LIVE</span>
+                        <span>ShopSmart Drop 001 / NOW LIVE</span>
                     </div>
                 </motion.div>
 

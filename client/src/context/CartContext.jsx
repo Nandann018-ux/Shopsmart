@@ -10,12 +10,12 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState(() => {
-        const saved = localStorage.getItem('urbangear_cart');
+        const saved = localStorage.getItem('shopsmart_cart');
         return saved ? JSON.parse(saved) : [];
     });
 
     useEffect(() => {
-        localStorage.setItem('urbangear_cart', JSON.stringify(cartItems));
+        localStorage.setItem('shopsmart_cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
     const addToCart = (product, quantity = 1) => {

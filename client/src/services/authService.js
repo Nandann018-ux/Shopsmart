@@ -4,7 +4,7 @@ const authService = {
   login: async (credentials) => {
     const response = await axiosInstance.post('/auth/login', credentials);
     if (response.data.token) {
-      localStorage.setItem('urbangear_token', response.data.token);
+      localStorage.setItem('shopsmart_token', response.data.token);
     }
     return response.data;
   },
@@ -15,7 +15,7 @@ const authService = {
   },
 
   logout: () => {
-    localStorage.removeItem('urbangear_token');
+    localStorage.removeItem('shopsmart_token');
   },
 
   getProfile: async () => {
