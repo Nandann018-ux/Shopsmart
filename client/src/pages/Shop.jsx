@@ -34,7 +34,7 @@ const Shop = () => {
         }
         result = result.filter(p => p.price <= priceRange);
         setFilteredProducts(result);
-    }, [activeCategory, priceRange]);
+    }, [activeCategory, priceRange, products]);
 
     const handleQuickAdd = (e, product) => {
         e.preventDefault();
