@@ -1,40 +1,54 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShoppingCart } from 'lucide-react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../ui/Card';
 
-const ProductCard = ({ product, onQuickAdd }) => {
+const FALLBACK = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80';
+
+const ProductCard = ({ product, onQuickView }) => {
+  const [imgErr, setImgErr] = useState(false);
+  const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+
   return (
-    <motion.div
-        layout
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-    >
-        <Link to={`/product/${product.id}`} className="block h-full group/card">
-            <Card
-                title={product.name}
-                subtitle={product.category}
-                image={product.image}
-                className="bg-brand-gray-dark/50 group-hover/card:border-brand-neon/50 transition-colors cursor-pointer"
-            >
-                <div className="flex justify-between items-center mt-6">
-                    <span className="text-xl font-black text-brand-white">${product.price}.00</span>
-                    <motion.button
-                        type="button"
-                        onClick={(e) => onQuickAdd(e, product)}
-                        whileHover={{ scale: 1.1, rotate: 5, backgroundColor: '#a855f7', color: '#fff' }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-3 rounded-2xl border border-brand-gray-light text-brand-white/60 transition-colors group/btn"
-                    >
-                        <ShoppingCart size={20} className="group-hover/btn:scale-110 transition-transform" />
-                    </motion.button>
-                </div>
-            </Card>
+    <article className="pcard">
+      {/* Image */}
+      <div className="pcard__img-wrap">
+        <img
+          src={imgErr ? FALLBACK : product.thumbnail}
+          alt={product.title}
+          className="pcard__img"
+          loading="lazy"
+          onError={() => setImgErr(true)}
+        />
+        <span className="pcard__badge">{product.category}</span>
+
+        {/* Quick View overlay */}
+        <div className="pcard__quick" onClick={() => onQuickView && onQuickView(product)}>
+          Quick View →
+        </div>
+
+        {/* Stock chip */}
+        {product.stock > 0 && product.stock <= 5 && (
+          <div style={{
+            position: 'absolute', bottom: 10, right: 10,
+            background: 'rgba(0,0,0,0.75)', color: '#fff',
+            fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em',
+            padding: '3px 6px', textTransform: 'uppercase',
+          }}>
+            Only {product.stock} left
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="pcard__info">
+        <Link to={`/product/${product.id}`}>
+          <p className="pcard__title">{product.title}</p>
         </Link>
-    </motion.div>
+        <div className="pcard__row">
+          <span className="pcard__cat">{product.brand}</span>
+          <span className="pcard__price">{fmt.format(product.price)}</span>
+        </div>
+      </div>
+    </article>
   );
 };
 

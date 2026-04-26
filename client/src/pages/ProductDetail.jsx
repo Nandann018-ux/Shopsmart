@@ -1,166 +1,241 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import Layout from '../layouts/Layout';
-import Container from '../components/ui/Container';
-import Button from '../components/ui/Button';
-import QuantitySelector from '../components/ui/QuantitySelector';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, ShoppingBag, Zap, Star, Truck, RotateCcw, ShieldCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import productService from '../services/productService';
 import { useCart } from '../context/CartContext';
-import { motion } from 'framer-motion';
-import { ShoppingCart, ShieldCheck, Truck, RotateCcw, ChevronLeft, Star } from 'lucide-react';
+import Layout from '../layouts/Layout';
+import ProductCard from '../components/product/ProductCard';
+
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 const ProductDetail = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { addToCart } = useCart();
-    const [quantity, setQuantity] = useState(1);
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addItem } = useCart();
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            setLoading(true);
-            const data = await productService.getProductById(id);
-            setProduct(data);
-            setLoading(false);
-            window.scrollTo(0, 0);
-        };
-        fetchProduct();
-    }, [id]);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [related, setRelated] = useState([]);
+  const [activeImg, setActiveImg] = useState(0);
+  const [size, setSize] = useState('');
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const [sizeErr, setSizeErr] = useState(false);
+  const [accordion, setAccordion] = useState({ details: true, shipping: false });
 
-    const handleAddToCart = () => {
-        if (product) {
-            addToCart(product, quantity);
-            // Optional: redirect to cart or show success toast
-            navigate('/cart');
-        }
-    };
+  const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 
-    if (!product) return null;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setLoading(true);
+    productService.getById(id).then(data => {
+      setProduct(data);
+      setLoading(false);
+      // Fetch related
+      productService.getTrending(4).then(res => setRelated(res.filter(p => p.id !== parseInt(id))));
+    });
+  }, [id]);
 
-    return (
-        <Layout>
-            <Container className="pt-24 pb-20">
-                {/* Breadcrumbs / Back */}
-                <Link to="/shop" className="inline-flex items-center gap-2 text-brand-white/40 hover:text-brand-neon transition-colors text-xs font-black uppercase tracking-widest mb-12 group">
-                    <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to Arsenal
-                </Link>
+  const handleAdd = () => {
+    if (!size) { setSizeErr(true); return; }
+    addItem({ ...product, selectedSize: size }, qty);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
-                    {/* Image Gallery Showcase */}
-                    <div className="flex-1 space-y-6">
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="relative aspect-square rounded-[3rem] overflow-hidden border border-brand-gray-light bg-brand-gray-dark cursor-zoom-in"
-                        >
-                            <motion.img 
-                                whileHover={{ scale: 1.15 }}
-                                transition={{ duration: 0.6, ease: "easeOut" }}
-                                src={product.image} 
-                                alt={product.name} 
-                                className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
-                            />
-                            <div className="absolute top-6 right-6 bg-brand-black/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-brand-gray-light text-brand-neon text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 shadow-2xl">
-                                <Star size={12} fill="currentColor" />
-                                Premium Unit
-                            </div>
-                        </motion.div>
-                        
-                        {/* Thumbnails (Placeholder for design feel) */}
-                        <div className="grid grid-cols-4 gap-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="aspect-square rounded-2xl border border-brand-gray-light overflow-hidden bg-brand-black/40 hover:border-brand-neon transition-colors cursor-pointer group">
-                                    <img src={product.image} className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 transition-opacity" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+  const handleBuyNow = () => {
+    if (!size) { setSizeErr(true); return; }
+    navigate('/checkout', { state: { buyNow: { ...product, selectedSize: size, qty } } });
+  };
 
-                    {/* Product Logistics */}
-                    <div className="flex-1 space-y-12">
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <span className="text-brand-neon text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Unit ID: {product.id}00X</span>
-                            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-brand-white leading-none mb-6">
-                                {product.name}
-                            </h1>
-                            <div className="flex items-center gap-6">
-                                <span className="text-3xl md:text-4xl font-black text-brand-white">${product.price}.00</span>
-                                <div className="h-4 w-[1px] bg-brand-gray-light" />
-                                <span className="px-3 py-1 bg-brand-gray-light/30 border border-brand-gray-light rounded text-[10px] uppercase font-black tracking-widest text-brand-white/50">In Stock</span>
-                            </div>
-                        </motion.div>
+  if (loading) return (
+    <Layout>
+      <div className="wrap" style={{ paddingTop: '60px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '60px' }}>
+          <div className="skel" style={{ aspectRatio: '4/5', width: '100%' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="skel" style={{ height: '12px', width: '30%' }} />
+            <div className="skel" style={{ height: '48px', width: '100%' }} />
+            <div className="skel" style={{ height: '24px', width: '40%' }} />
+            <div className="skel" style={{ height: '100px', width: '100%' }} />
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="space-y-6"
-                        >
-                            <h3 className="text-xs font-black uppercase tracking-widest text-brand-neon">Intelligence</h3>
-                            <p className="text-brand-white/50 text-sm md:text-base leading-relaxed uppercase tracking-wider font-medium lg:max-w-md">
-                                {product.description}
-                            </p>
-                        </motion.div>
+  if (!product) return (
+    <Layout>
+      <div className="wrap" style={{ padding: '100px 0', textAlign: 'center' }}>
+        <p className="t-label">Product not found</p>
+        <Link to="/shop" className="btn btn-outline" style={{ marginTop: '20px' }}>Back to Shop</Link>
+      </div>
+    </Layout>
+  );
 
-                        {/* Tactical Options */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            className="space-y-10"
-                        >
-                            <div className="space-y-4">
-                                <h3 className="text-[10px] font-black uppercase tracking-widest text-brand-white/40">Deployment Quantity</h3>
-                                <QuantitySelector value={quantity} onChange={setQuantity} />
-                            </div>
+  const images = product.images || [product.thumbnail];
 
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Button 
-                                    onClick={handleAddToCart}
-                                    variant="neon" 
-                                    size="lg" 
-                                    className="flex-1 uppercase tracking-[0.3em] font-black py-5 text-sm"
-                                >
-                                    <ShoppingCart size={18} className="mr-3" />
-                                    Add to Cart
-                                </Button>
-                                <Button variant="outline" size="lg" className="px-8 font-black uppercase tracking-[0.3em]">
-                                    Buy Now
-                                </Button>
-                            </div>
-                        </motion.div>
+  return (
+    <Layout>
+      <div className="wrap" style={{ paddingTop: '40px', paddingBottom: '100px' }}>
+        {/* Breadcrumb */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
+          <button onClick={() => navigate(-1)} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: 0 }}>
+            <ArrowLeft size={14} />
+            <span className="t-label" style={{ color: 'inherit' }}>Back</span>
+          </button>
+          <span style={{ color: 'var(--border-mid)' }}>/</span>
+          <span className="t-label">{product.category}</span>
+          <span style={{ color: 'var(--border-mid)' }}>/</span>
+          <span className="t-label" style={{ color: 'var(--text)' }}>{product.title}</span>
+        </div>
 
-                        {/* Tech Specs / Badges */}
-                        <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                            className="pt-12 border-t border-brand-gray-light grid grid-cols-1 sm:grid-cols-3 gap-8"
-                        >
-                            <div className="flex items-center gap-3 text-brand-white/30 hover:text-brand-white transition-colors cursor-default group">
-                                <Truck size={18} className="group-hover:text-brand-neon transition-colors" />
-                                <span className="text-[9px] font-black uppercase tracking-widest">Global Drop</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-brand-white/30 hover:text-brand-white transition-colors cursor-default group">
-                                <RotateCcw size={18} className="group-hover:text-brand-neon transition-colors" />
-                                <span className="text-[9px] font-black uppercase tracking-widest">30-Day Reset</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-brand-white/30 hover:text-brand-white transition-colors cursor-default group">
-                                <ShieldCheck size={18} className="group-hover:text-brand-neon transition-colors" />
-                                <span className="text-[9px] font-black uppercase tracking-widest">Secure Link</span>
-                            </div>
-                        </motion.div>
-                    </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: '60px', alignItems: 'start' }}>
+          
+          {/* LEFT: GALLERY */}
+          <div>
+            <div style={{ position: 'sticky', top: '100px' }}>
+              <div style={{ aspectRatio: '4/5', overflow: 'hidden', background: 'var(--bg-raised)', border: '1px solid var(--border)', marginBottom: '16px' }}>
+                <motion.img 
+                  key={activeImg}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  src={images[activeImg]} 
+                  alt={product.title} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '10px' }}>
+                {images.map((img, i) => (
+                  <button 
+                    key={i} 
+                    onClick={() => setActiveImg(i)}
+                    style={{ 
+                      flex: '0 0 80px', aspectRatio: '1/1', border: `1px solid ${activeImg === i ? 'var(--text)' : 'var(--border)'}`,
+                      overflow: 'hidden', opacity: activeImg === i ? 1 : 0.6, transition: 'opacity 0.2s'
+                    }}
+                  >
+                    <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: PURCHASE PANEL */}
+          <aside>
+            <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '24px', marginBottom: '24px' }}>
+              <p className="t-label" style={{ marginBottom: '12px' }}>{product.brand} · {product.category}</p>
+              <h1 className="t-heading" style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{product.title}</h1>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  {[1,2,3,4,5].map(s => <Star key={s} size={11} fill={s <= Math.round(product.rating) ? 'currentColor' : 'none'} />)}
                 </div>
-            </Container>
-        </Layout>
-    );
+                <span className="t-label" style={{ color: 'var(--text)' }}>{product.rating}</span>
+                <span style={{ color: 'var(--border-mid)' }}>|</span>
+                <span className="t-label" style={{ color: product.stock > 0 ? '#4caf50' : '#f44336' }}>
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                </span>
+              </div>
+
+              <p style={{ fontSize: '1.8rem', fontWeight: 900 }}>{fmt.format(product.price)}</p>
+            </div>
+
+            {/* Select Size */}
+            <div style={{ marginBottom: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <p className="t-label-bright" style={{ color: sizeErr ? '#f44' : 'inherit' }}>
+                  {sizeErr ? 'Required: Select Size' : 'Select Size'}
+                </p>
+                <button className="btn-ghost" style={{ fontSize: '10px', padding: 0 }}>Size Guide</button>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {SIZES.map(s => (
+                  <button 
+                    key={s} 
+                    className={`size-chip ${size === s ? 'selected' : ''}`}
+                    onClick={() => { setSize(s); setSizeErr(false); }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quantity */}
+            <div style={{ marginBottom: '32px' }}>
+              <p className="t-label-bright" style={{ marginBottom: '12px' }}>Quantity</p>
+              <div className="qty-stepper">
+                <button className="qty-btn" onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
+                <div className="qty-val">{qty}</div>
+                <button className="qty-btn" onClick={() => setQty(q => q + 1)}>+</button>
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '40px' }}>
+              <button className="btn btn-fill btn-full" onClick={handleAdd}>
+                <ShoppingBag size={14} />
+                {added ? 'Added to Bag ✓' : 'Add to Bag'}
+              </button>
+              <button className="btn btn-outline btn-full" onClick={handleBuyNow}>
+                <Zap size={14} />
+                Buy It Now
+              </button>
+            </div>
+
+            {/* Info Accordions */}
+            <div className="divide-y" style={{ borderBottom: '1px solid var(--border)' }}>
+              <div className="accordion-head" onClick={() => setAccordion(a => ({ ...a, details: !a.details }))}>
+                Details & Description
+                {accordion.details ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </div>
+              {accordion.details && (
+                <div className="accordion-body">
+                  <p className="t-body">{product.description}</p>
+                </div>
+              )}
+
+              <div className="accordion-head" onClick={() => setAccordion(a => ({ ...a, shipping: !a.shipping }))}>
+                Shipping & Returns
+                {accordion.shipping ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </div>
+              {accordion.shipping && (
+                <div className="accordion-body">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <Truck size={14} />
+                      <p className="t-body">Free shipping on orders above ₹4,000. Express available.</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <RotateCcw size={14} />
+                      <p className="t-body">30-day easy returns policy. Items must be unworn.</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <ShieldCheck size={14} />
+                      <p className="t-body">100% authentic gear guaranteed.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
+
+        {/* Related Products */}
+        {related.length > 0 && (
+          <div style={{ marginTop: '100px', paddingTop: '60px', borderTop: '1px solid var(--border)' }}>
+            <h2 className="t-label-bright" style={{ fontSize: '12px', marginBottom: '32px' }}>Recommended Units</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2px' }}>
+              {related.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </div>
+        )}
+      </div>
+    </Layout>
+  );
 };
 
 export default ProductDetail;

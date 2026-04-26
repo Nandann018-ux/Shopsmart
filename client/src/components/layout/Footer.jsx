@@ -1,46 +1,83 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Camera, Globe, Mail, ArrowUpRight } from 'lucide-react';
 
 const Footer = () => {
-  const preventDefault = (e) => e.preventDefault();
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand-gray-dark border-t border-brand-gray-light py-16 mt-auto text-brand-white">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
-          <Link to="/" className="text-2xl font-black tracking-tighter hover:text-brand-neon transition-colors font-brand uppercase">
-            SHOP<span className="text-brand-neon italic">SMART</span>
-          </Link>
-          <p className="text-brand-white/50 text-xs max-w-xs uppercase tracking-widest font-bold">
-            Quality streetwear and tactical essentials for the modern city explorer.
-          </p>
+    <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg)', paddingTop: '100px', paddingBottom: '40px' }}>
+      <div className="wrap">
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '60px', marginBottom: '80px' }}>
+          
+          {/* Brand Info */}
+          <div>
+            <Link to="/" style={{ fontWeight: 900, fontSize: '18px', letterSpacing: '0.12em', textTransform: 'uppercase', display: 'block', marginBottom: '24px' }}>
+              Urban Gear
+            </Link>
+            <p className="t-body" style={{ maxWidth: '300px', fontSize: '11px', lineHeight: 1.8 }}>
+              Engineered necessities for the modern city explorer. High-performance field gear designed with architectural discipline.
+            </p>
+            <div style={{ display: 'flex', gap: '20px', marginTop: '32px' }}>
+              <Camera size={18} style={{ color: 'var(--text-muted)' }} />
+              <Globe size={18} style={{ color: 'var(--text-muted)' }} />
+              <Mail size={18} style={{ color: 'var(--text-muted)' }} />
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <p className="t-label-bright" style={{ marginBottom: '24px' }}>Deployment</p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['All Units', 'Field Shirts', 'Ground Force', 'Time Pieces', 'Eye Wear'].map(l => (
+                <li key={l}>
+                  <Link to="/shop" className="t-label" style={{ fontSize: '10px', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = 'var(--text)'} onMouseLeave={e => e.target.style.color = 'var(--text-muted)'}>
+                    {l}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <p className="t-label-bright" style={{ marginBottom: '24px' }}>Service</p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['Order Status', 'Field Testing', 'Shipping Details', 'Returns Policy', 'Contact Support'].map(l => (
+                <li key={l}>
+                  <span className="t-label" style={{ fontSize: '10px', cursor: 'default' }}>{l}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <p className="t-label-bright" style={{ marginBottom: '24px' }}>Policy</p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['Privacy Protocol', 'Terms of Service', 'Security Standards', 'Cookies'].map(l => (
+                <li key={l}>
+                  <span className="t-label" style={{ fontSize: '10px', cursor: 'default' }}>{l}</span>
+                </li>
+              ))}
+              <li style={{ marginTop: '12px' }}>
+                <a href="https://outfit.hellohello.is" target="_blank" rel="noreferrer" className="t-label" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '9px' }}>
+                  Visual Ref: Outfit <ArrowUpRight size={10} />
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 text-[10px] font-black uppercase tracking-[0.2em]">
-          <div className="flex flex-col gap-4 text-brand-white/70">
-            <span className="text-brand-white mb-2 underline decoration-brand-neon decoration-2 underline-offset-4">Company</span>
-            <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">About</a>
-            <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Contact</a>
+
+        {/* Bottom Bar */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '40px', borderTop: '1px solid var(--border)' }}>
+          <div>
+            <p className="t-label" style={{ fontSize: '9px' }}>© {currentYear} URBAN GEAR OPERATIONS. ALL RIGHTS RESERVED.</p>
           </div>
-          <div className="flex flex-col gap-4 text-brand-white/70">
-            <span className="text-brand-white mb-2 underline decoration-brand-neon decoration-2 underline-offset-4">Store</span>
-            <Link to="/shop" className="hover:text-brand-neon transition-colors">All Units</Link>
-            <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">New Drops</a>
+          <div style={{ textAlign: 'right' }}>
+            <p className="t-label" style={{ fontSize: '9px' }}>HQ // BENGALURU, INDIA</p>
+            <p className="t-label" style={{ fontSize: '9px', marginTop: '4px' }}>IST · {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
           </div>
-          <div className="flex flex-col gap-4 text-brand-white/70 col-span-2 md:col-span-1">
-            <span className="text-brand-white mb-2 underline decoration-brand-neon decoration-2 underline-offset-4">Legal</span>
-            <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Privacy</a>
-            <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Terms</a>
-          </div>
-        </div>
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 mt-20 pt-8 border-t border-brand-gray-light flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] text-brand-white/20 font-black uppercase tracking-widest text-center">
-        <p>© 2026 ShopSmart Studio. All Rights Reserved.</p>
-        <div className="flex gap-6">
-          <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Instagram</a>
-          <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Twitter</a>
-          <a href="#" onClick={preventDefault} className="hover:text-brand-neon transition-colors">Discord</a>
         </div>
       </div>
     </footer>

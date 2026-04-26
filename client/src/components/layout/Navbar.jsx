@@ -1,142 +1,176 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ShoppingBag, Search, Menu, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useTheme } from '../../context/ThemeContext';
+import CartDrawer from '../cart/CartDrawer';
 
-const Navbar = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { totalItems } = useCart();
-    const location = useLocation();
+const THEMES = [
+  { id: 'dark',  bg: '#0a0a0a' },
+  { id: 'light', bg: '#f0ede7' },
+  { id: 'red',   bg: '#b80c2a' },
+];
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+const Header = () => {
+  const { totalItems }         = useCart();
+  const { theme, toggleTheme } = useTheme();
+  const location               = useLocation();
+  const navigate               = useNavigate();
 
-    const navLinks = [
-        { name: 'Home', path: '/' },
-        { name: 'Shop', path: '/shop' },
-    ];
+  const [scrolled,     setScrolled]     = useState(false);
+  const [cartOpen,     setCartOpen]     = useState(false);
+  const [mobileOpen,   setMobileOpen]   = useState(false);
+  const [searchOpen,   setSearchOpen]   = useState(false);
+  const [searchQuery,  setSearchQuery]  = useState('');
 
-    return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled 
-            ? 'bg-brand-black/80 backdrop-blur-xl border-b border-brand-gray-light py-2' 
-            : 'bg-transparent py-6'
-        }`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-12">
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center gap-3 group">
-                        <motion.div
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            className="bg-brand-neon p-2 rounded-xl text-white shadow-[var(--shadow-neon)]"
-                        >
-                            <ShoppingBag size={18} strokeWidth={2.5} />
-                        </motion.div>
-                        <span className="text-xl font-black tracking-tighter text-brand-white uppercase">
-                            Urban<span className="text-brand-neon">Gear</span>
-                        </span>
-                    </Link>
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
 
-                    {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center space-x-12 text-xs font-black uppercase tracking-[0.3em] text-brand-white/70">
-                        {navLinks.map((link) => (
-                            <Link 
-                                key={link.name} 
-                                to={link.path} 
-                                className={`hover:text-brand-neon transition-colors relative group ${location.pathname === link.path ? 'text-brand-neon' : ''}`}
-                            >
-                                {link.name}
-                                <span className={`absolute -bottom-1 left-0 h-0.5 bg-brand-neon transition-all group-hover:w-full ${location.pathname === link.path ? 'w-full' : 'w-0'}`} />
-                            </Link>
-                        ))}
-                    </div>
+  useEffect(() => setMobileOpen(false), [location.pathname]);
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-2">
-                        <button type="button" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
-                            <Search size={20} className="group-hover:text-brand-neon transition-colors" />
-                        </button>
-                        
-                        {/* Cart Action with Badge */}
-                        <Link to="/cart" className="relative p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
-                            <ShoppingBag size={20} className="group-hover:text-brand-neon transition-colors" />
-                            <AnimatePresence>
-                                {totalItems > 0 && (
-                                    <motion.span
-                                        initial={{ scale: 0, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0, opacity: 0 }}
-                                        className="absolute top-0 right-0 w-4 h-4 bg-brand-neon text-brand-black text-[10px] font-black flex items-center justify-center rounded-full shadow-neon"
-                                    >
-                                        {totalItems}
-                                    </motion.span>
-                                )}
-                            </AnimatePresence>
-                        </Link>
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
 
-                        {/* Login/Profile Action */}
-                        <Link to="/login" className="p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all group">
-                            <User size={20} className="group-hover:text-brand-neon transition-colors" />
-                        </Link>
-                        
-                        <button 
-                            type="button"
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="md:hidden p-2 hover:bg-brand-gray-light rounded-xl text-brand-white transition-all"
-                        >
-                            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                        </button>
-                    </div>
-                </div>
+  return (
+    <>
+      <header className={`nav-root ${scrolled ? 'scrolled' : ''}`}>
+        {/* Search bar overlay */}
+        {searchOpen && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'var(--bg)',
+            borderBottom: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center',
+            padding: '0 var(--outer-pad)',
+            zIndex: 2,
+          }}>
+            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '16px' }}>
+              <Search size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search gear, brand, category…"
+                style={{
+                  flex: 1, background: 'none', border: 'none', outline: 'none',
+                  fontSize: '14px', fontWeight: 500, color: 'var(--text)',
+                }}
+              />
+              <button type="button" onClick={() => setSearchOpen(false)} style={{ color: 'var(--text-muted)' }}>
+                <X size={18} />
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Main bar */}
+        <div className="wrap" style={{ height: '100%', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '24px' }}>
+          {/* LEFT nav */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+            <Link to="/shop" className={`t-label transition-colors ${location.pathname === '/shop' ? 'text-[var(--text)]' : ''}`}
+              style={{ color: location.pathname === '/shop' ? 'var(--text)' : 'var(--text-muted)' }}>
+              Shop
+            </Link>
+            <Link to="/shop?cat=New" className="t-label"
+              style={{ color: 'var(--text-muted)' }}>
+              Collections
+            </Link>
+            <Link to="/shop?cat=Shirts" className="t-label hidden md:block"
+              style={{ color: 'var(--text-muted)' }}>
+              New Arrivals
+            </Link>
+          </nav>
+
+          {/* CENTER brand */}
+          <Link to="/" style={{ fontWeight: 900, fontSize: '15px', letterSpacing: '0.12em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            Urban Gear
+          </Link>
+
+          {/* RIGHT actions */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '20px' }}>
+            {/* Theme dots */}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {THEMES.map(t => (
+                <button key={t.id} onClick={() => toggleTheme(t.id)}
+                  className={`tdot ${theme === t.id ? 'on' : ''}`}
+                  style={{ backgroundColor: t.bg }}
+                />
+              ))}
             </div>
 
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {isMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-brand-gray-dark border-b border-brand-gray-light overflow-hidden"
-                    >
-                        <div className="px-4 pt-4 pb-8 space-y-4 text-center">
-                            {navLinks.map((link) => (
-                                <Link 
-                                    key={link.name} 
-                                    to={link.path} 
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="block py-3 text-lg font-bold text-brand-white hover:text-brand-neon transition-colors tracking-widest uppercase"
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                            <Link 
-                                to="/cart" 
-                                onClick={() => setIsMenuOpen(false)}
-                                className="block py-3 text-lg font-bold text-brand-neon transition-colors tracking-widest uppercase"
-                            >
-                                Loadout ({totalItems})
-                            </Link>
-                            <Link 
-                                to="/login" 
-                                onClick={() => setIsMenuOpen(false)}
-                                className="block py-3 text-lg font-bold text-brand-white hover:text-brand-neon transition-colors tracking-widest uppercase"
-                            >
-                                Secure Access
-                            </Link>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </nav>
-    );
+            {/* Search */}
+            <button onClick={() => setSearchOpen(true)} style={{ color: 'var(--text-muted)', transition: 'color 0.2s' }}
+              className="hidden md:flex">
+              <Search size={16} strokeWidth={1.5} />
+            </button>
+
+            {/* Bag */}
+            <button
+              onClick={() => setCartOpen(true)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', transition: 'color 0.2s' }}
+              className="t-label"
+            >
+              <ShoppingBag size={15} strokeWidth={1.5} />
+              BAG
+              {totalItems > 0 && (
+                <span style={{
+                  minWidth: '16px', height: '16px', borderRadius: '50%',
+                  background: 'var(--text)', color: 'var(--bg)',
+                  fontSize: '9px', fontWeight: 900,
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '0 3px',
+                }}>
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile hamburger */}
+            <button onClick={() => setMobileOpen(v => !v)} className="md:hidden" style={{ color: 'var(--text-muted)' }}>
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileOpen && (
+          <div style={{
+            position: 'absolute', top: '100%', left: 0, right: 0,
+            background: 'var(--bg)',
+            borderBottom: '1px solid var(--border)',
+            padding: '24px var(--outer-pad) 28px',
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {[['Shop', '/shop'], ['Collections', '/shop'], ['New Arrivals', '/shop']].map(([l, to]) => (
+                <Link key={l} to={to} className="t-label-bright">{l}</Link>
+              ))}
+              <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '8px', borderTop: '1px solid var(--border)' }}>
+                <Search size={14} style={{ color: 'var(--text-muted)' }} />
+                <input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search…"
+                  className="input"
+                  style={{ border: 'none', background: 'none', padding: '0', fontSize: '13px' }}
+                />
+              </form>
+            </div>
+          </div>
+        )}
+      </header>
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+    </>
+  );
 };
 
-export default Navbar;
+export default Header;
