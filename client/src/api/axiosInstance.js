@@ -27,4 +27,10 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Handle unauthorized (logout or redirect)
+      localStorage.removeItem('urbangear_token');
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;
