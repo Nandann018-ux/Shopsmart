@@ -15,7 +15,7 @@ app.use(express.static(clientDistPath));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    message: 'ShopSmart Backend is running',
+    message: 'Urban Gear Backend is running',
     timestamp: new Date().toISOString()
   });
 });

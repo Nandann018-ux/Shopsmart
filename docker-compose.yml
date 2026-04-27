@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  shopsmart:
+  urbangear:
     build:
       context: .
       dockerfile: Dockerfile
-    image: shopsmart-prod:latest
-    container_name: shopsmart-viva-demo
+    image: urbangear-prod:latest
+    container_name: urbangear-viva-demo
     ports:
       - "5000:5000"
     environment:
