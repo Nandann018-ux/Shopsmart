@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { PrismaClient } from '@prisma/client';
 
 dotenv.config();
@@ -17,22 +18,41 @@ export const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
-// Static file serving for production
-const clientDistPath = path.join(__dirname, '../../client/dist');
+// --- Dynamic Path Resolver for Frontend Assets ---
+// 1. Local Dev: server/src/index.ts -> ../../client/dist
+// 2. Docker: server/dist/index.js -> ../../client/dist
+const localDist = path.resolve(__dirname, '../../client/dist');
+const dockerDist = path.resolve('/app/client/dist');
+
+const clientDistPath = fs.existsSync(dockerDist) ? dockerDist : localDist;
+
+console.log(`[Urban Gear] Static assets resolved to: ${clientDistPath}`);
+
+// Static file serving
 app.use(express.static(clientDistPath));
 
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Urban Gear API is running' });
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: 'Urban Gear API is running',
+        mode: fs.existsSync(dockerDist) ? 'production' : 'development'
+    });
 });
 
-// Fallback to index.html for SPA routing
+// --- Catch-all route for React Router (SPA) ---
 app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
-        res.sendFile(path.join(clientDistPath, 'index.html'));
+        const indexPath = path.join(clientDistPath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+        } else {
+            res.status(404).send('Frontend build not found');
+        }
     }
 });
 
