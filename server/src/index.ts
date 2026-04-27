@@ -17,10 +17,6 @@ export const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
-
-// --- Dynamic Path Resolver for Frontend Assets ---
-// 1. Local Dev: server/src/index.ts -> ../../client/dist
-// 2. Docker: server/dist/index.js -> ../../client/dist
 const localDist = path.resolve(__dirname, '../../client/dist');
 const dockerDist = path.resolve('/app/client/dist');
 
