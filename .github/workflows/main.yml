@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Urban Gear ECS CI/CD
 
 on:
   push:
@@ -7,13 +7,66 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to Amazon ECS
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
-      - name: SSH into EC2 and Deploy
-        uses: appleboy/ssh-action@master
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            bash /home/ubuntu/Shopsmart/deploy.sh
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push Server image to Amazon ECR
+        id: build-server-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: urbangear-server
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./server
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push Client image to Amazon ECR
+        id: build-client-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: urbangear-client
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./client
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Fill in the new Server image ID in the Amazon ECS task definition
+        id: task-def-server
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/server-task-def.json
+          container-name: urbangear-server
+          image: ${{ steps.build-server-image.outputs.image }}
+
+      - name: Fill in the new Client image ID in the Amazon ECS task definition
+        id: task-def-client
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/client-task-def.json
+          container-name: urbangear-client
+          image: ${{ steps.build-client-image.outputs.image }}
+
+      - name: Deploy Amazon ECS Task Definitions
+        run: |
+          aws ecs register-task-definition --cli-input-json file://${{ steps.task-def-server.outputs.task-definition }}
+          aws ecs register-task-definition --cli-input-json file://${{ steps.task-def-client.outputs.task-definition }}
+          aws ecs update-service --cluster urbangear-cluster --service urbangear-server-service --task-definition urbangear-server --force-new-deployment
+          aws ecs update-service --cluster urbangear-cluster --service urbangear-client-service --task-definition urbangear-client --force-new-deployment
