@@ -1,57 +1,116 @@
-# ShopSmart – Modern Full-Stack E-Commerce Platform
+# Urban Gear: Fashion for Men
 
-ShopSmart is a high-performance, full-stack e-commerce solution built with a focus on **scalability**, **clean architecture**, and **production-ready deployment**. It features a reactive React frontend and a robust TypeScript/Node.js backend, unified under a single-stage build system.
+Urban Gear is a high-performance, full-stack e-commerce solution engineered with a focus on scalability, clean architecture, and production-ready deployment. The platform features a reactive React frontend and a robust TypeScript-based Node.js backend, integrated via a unified build system.
 
-##  Presentation Highlights (Viva)
+## Project Highlights
 
-- **Unified Build Pipeline**: A custom-engineered shell automation that synchronizes frontend assets with backend static serving.
-- **Multi-Stage Docker Architecture**: Optimized production images using Docker multi-stage builds to separate build-time dependencies from the final lean runtime.
-- **Full-Stack Static Serving**: The backend is configured to serve the entire SPA autonomously, eliminating the need for complex proxy configurations in production.
-- **CI/CD Integration**: Fully automated GitHub Actions pipeline for global build verification and recursive testing.
+- **Unified Build Pipeline**: Automated shell scripting synchronizes frontend assets with backend static serving for seamless deployment.
+- **Multi-Stage Docker Architecture**: Optimized production images utilize Docker multi-stage builds to minimize runtime overhead.
+- **Layered Backend Architecture**: Implementation of the Controller-Service-Repository pattern ensures separation of concerns and maintainability.
+- **Type-Safe Development**: End-to-end type safety using TypeScript and Prisma ORM for reliable data handling.
+- **Automated CI/CD**: Integrated GitHub Actions workflow for continuous build verification and automated testing.
 
-##  Quick Start (Demonstration Mode)
+## Tech Stack
 
-### 1. Simple Build & Run
-The fastest way to demonstrate the project:
+### Frontend
+- **Framework**: React 19 with Vite for rapid development and optimized builds.
+- **Styling**: Tailwind CSS 4 for utility-first responsive design.
+- **Animations**: Framer Motion for premium user interface transitions.
+- **State Management**: React Context API for authentication and cart persistence.
+- **Icons**: Lucide React for consistent vector iconography.
+
+### Backend
+- **Runtime**: Node.js with TypeScript.
+- **Web Framework**: Express.js.
+- **Database ORM**: Prisma with MongoDB integration.
+- **Security**: JWT-based authentication and BCrypt hashing for sensitive data protection.
+- **Testing**: Jest and Supertest for comprehensive unit and integration testing.
+
+### DevOps and Infrastructure
+- **Containerization**: Docker and Docker Compose for environment parity.
+- **CI/CD**: GitHub Actions.
+- **Deployment**: Render-compatible configuration for cloud hosting.
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- MongoDB instance (local or Atlas)
+- Docker (optional, for containerized deployment)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd UrbanGear
+   ```
+
+2. Configure environment variables:
+   Create a `.env` file in the `server` directory based on `.env.example`:
+   ```bash
+   cp server/.env.example server/.env
+   ```
+
+3. Install dependencies:
+   ```bash
+   # Root level
+   cd client && npm install
+   cd ../server && npm install
+   ```
+
+### Development
+
+To run the application in development mode:
+
+1. Start the backend:
+   ```bash
+   cd server
+   npm run dev
+   ```
+
+2. Start the frontend:
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+### Production Build
+
+To build the entire project using the automated script:
 ```bash
 chmod +x ./build.sh
 ./build.sh
+```
+After the build completes, start the production server:
+```bash
 node server/dist/index.js
 ```
-The application will be live at: `http://localhost:5000`
 
-### 2. Docker Deployment
-For a professional, containerized demonstration:
+## Docker Deployment
+
+The project includes a multi-stage Dockerfile and a Docker Compose configuration for professional deployment.
+
+To start the services:
 ```bash
 docker-compose up --build
 ```
 
-## Architecture Overview
-
-### Backend (Node.js & TypeScript)
-- **Framework**: Express.js
-- **ORM**: Prisma with MongoDB
-- **Security**: JWT-based Authentication & BCrypt Hashing
-- **Architecture**: Layered (Controllers → Services → Repository)
-
-### Frontend (React & Vite)
-- **Styling**: Tailwind CSS 
-- **Animations**: Framer Motion (Premium HUD aesthetic)
-- **State Management**: React Context (Cart & Auth)
-
-## Project Structure
+## Directory Structure
 
 ```text
-├── client/          # Vite + React Frontend
-├── server/          # TypeScript + Express Backend
-├── build.sh         # Unified automation script
-├── Dockerfile       # Multi-stage production build
-└── docker-compose.yml
+├── client/              # React + Vite frontend application
+├── server/              # TypeScript + Express backend application
+│   ├── prisma/          # Database schema and migrations
+│   ├── src/             # Backend source code
+│   └── tests/           # Backend test suites
+├── .github/             # GitHub Actions workflows
+├── build.sh             # Unified build automation script
+├── Dockerfile           # Multi-stage production Dockerfile
+└── docker-compose.yml   # Container orchestration config
 ```
 
-## CI/CD Status
-The project includes a GitHub Actions workflow that executes a full project rebuild and sanity check on every commit to ensure 100% stability.
+## Status
 
----
-
-**ShopSmart** was developed to showcase modern web engineering practices, combining a tactile user experience with a scalable, professional-grade backend.
+The project is currently configured with a full CI/CD pipeline that validates builds and executes tests on every push, ensuring system stability and code quality.

@@ -2,11 +2,15 @@ import axiosInstance from '../api/axiosInstance';
 
 const authService = {
   login: async (credentials) => {
-    const response = await axiosInstance.post('/auth/login', credentials);
-    if (response.data.token) {
-      localStorage.setItem('shopsmart_token', response.data.token);
+    try {
+      const response = await axiosInstance.post('/auth/login', credentials);
+      if (response.data.token) {
+        localStorage.setItem('urbangear_token', response.data.token);
+      }
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
     }
-    return response.data;
   },
 
   register: async (userData) => {
@@ -15,7 +19,7 @@ const authService = {
   },
 
   logout: () => {
-    localStorage.removeItem('shopsmart_token');
+    localStorage.removeItem('urbangear_token');
   },
 
   getProfile: async () => {

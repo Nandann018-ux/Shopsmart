@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 // Request Interceptor for Authentication
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('shopsmart_token');
+    const token = localStorage.getItem('urbangear_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,10 +27,4 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Handle unauthorized (logout or redirect)
-      localStorage.removeItem('shopsmart_token');
-    }
-    return Promise.reject(error);
-  }
-);
-
 export default axiosInstance;

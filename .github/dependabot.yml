@@ -1,10 +1,10 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" # If you are using npm
-    directory: "/client"     # Path to your frontend package.json
+  - package-ecosystem: "npm" 
+    directory: "/client"     
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/server"     # Path to your backend package.json
+    directory: "/server"     
     schedule:
       interval: "weekly"

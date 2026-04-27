@@ -1,41 +1,19 @@
-name: ShopSmart CI Pipeline (Viva Edition)
+name: CI/CD Pipeline
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: SSH into EC2 and Deploy
+        uses: appleboy/ssh-action@master
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js v22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-          cache-dependency-path: |
-            server/package-lock.json
-            client/package-lock.json
-
-      - name: Run Unified Build Script
-        run: |
-          chmod +x ./build.sh
-          ./build.sh
-
-      - name: Backend Status Verification
-        run: |
-          cd server
-          npm test || echo "Test step skipped for now"
-
-      - name: Auto-Rollback on Failure
-        if: failure()
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git revert --no-edit HEAD
-          git commit --amend -m "Revert: Ci Failure detected [skip ci]"
-          git push
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            bash /home/ubuntu/Shopsmart/deploy.sh

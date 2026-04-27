@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ShopSmart: Professional Build Automation Script
+# Urban Gear: Professional Build Automation Script
 # Designed for the final viva presentation
 
 set -e
@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}Initializing ShopSmart Production Build...${NC}"
+echo -e "${BLUE}Initializing Urban Gear Production Build...${NC}"
 
 # System readiness check
 if ! command -v node &> /dev/null; then
@@ -45,7 +45,7 @@ echo -e "\n${BLUE}Finalizing Asset Integration...${NC}"
 echo -e "${GREEN}✓ Full-stack integration active.${NC}"
 
 echo -e "\n${CYAN}------------------------------------------------------------${NC}"
-echo -e "${GREEN}✅ SHOPSMART BUILD COMPLETED SUCCESSFULLY!${NC}"
+echo -e "${GREEN}✅ URBAN GEAR BUILD COMPLETED SUCCESSFULLY!${NC}"
 echo -e "${CYAN}------------------------------------------------------------${NC}"
 echo -e "Demo Command: ${BLUE}node server/dist/index.js${NC}"
 echo -e "${CYAN}------------------------------------------------------------${NC}"

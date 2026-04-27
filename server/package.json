@@ -1,7 +1,7 @@
 {
-  "name": "shopsmart-backend",
+  "name": "urban-gear-backend",
   "version": "1.0.0",
-  "description": "Backend API for ShopSmart",
+  "description": "Backend API for Urban Gear",
   "main": "src/index.js",
   "scripts": {
     "build": "tsc",

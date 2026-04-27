@@ -1,23 +1,35 @@
 # Stage 1: Build Frontend
-FROM node:22-alpine AS frontend-builder
+FROM node:20-alpine AS frontend-builder
+
 WORKDIR /app/client
+
 COPY client/package*.json ./
-RUN npm install
+RUN npm ci
+
 COPY client/ .
+
 RUN npm run build
 
+
 # Stage 2: Build Backend
-FROM node:22-alpine AS backend-builder
+FROM node:20-alpine AS backend-builder
+
 WORKDIR /app/server
+
 RUN apk add --no-cache openssl
+
 COPY server/package*.json ./
-RUN npm install
+RUN npm ci
+
 COPY server/ .
+
 RUN npx prisma generate
 RUN npm run build
 
+
 # Stage 3: Final Production Image
-FROM node:22-alpine
+FROM node:20-alpine
+
 WORKDIR /app/server
 
 RUN apk add --no-cache openssl
