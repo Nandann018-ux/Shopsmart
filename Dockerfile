@@ -11,6 +11,7 @@ FROM node:22-alpine AS backend-builder
 WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm install
+RUN npx prisma generate
 COPY server/ .
 RUN npm run build
 
